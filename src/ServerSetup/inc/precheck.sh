@@ -9,7 +9,7 @@ if [ ! -f "$TCLI_SERVERSETUP_FILE_CONF" ]; then
 fi
 
 # We need yq that can be installed via snap
-if ! (which snap); then
+if ! (which snap > /dev/null); then
 	infoscreenfailed
 	printf "${RED}yq is needed to be installed for parsing configuation files\n"  >&3
 	[ $DISTRIBUTION_ID == "Debian GNU/Linux" ] && printf "sudo apt install snapd && sudo snap install core && sudo systemctl start snapd && sudo snap yq${NC}\n" >&3
@@ -18,7 +18,7 @@ if ! (which snap); then
 fi
 
 # We need sshpass
-if ! (which sshpass); then
+if ! (which sshpass > /dev/null); then
 	infoscreenfailed
 	printf "\n${RED}sshpass need to be installed"
 	[ $DISTRIBUTION_ID == "Debian GNU/Linux" ] && printf "sudo apt install sshpass${NC}" >&3
@@ -27,7 +27,7 @@ if ! (which sshpass); then
 fi
 
 # We need nc (netcat)
-if ! (which nc); then
+if ! (which nc > /dev/null); then
 	infoscreenfailed
 	printf "\n${RED}netcat need to be installed"
 	[ $DISTRIBUTION_ID == "Debian GNU/Linux" ] && printf "sudo apt install netcat${NC}" >&3
