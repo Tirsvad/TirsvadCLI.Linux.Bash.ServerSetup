@@ -1,8 +1,12 @@
 [Tt]emp/
 [Ll]og/
-src/ServerSetup/conf/letsencrypt/*/
+.vscode
 *.old
-/src/ServerSetup/conf/settings.yaml
+
+src/ServerSetup/vendor/
+
+src/ServerSetup/conf/settings.yaml
+
+src/ServerSetup/conf/letsencrypt/*/
 src/ServerSetup/conf/nginx/backup_nginx_sites_configuration.tar.gz
 src/ServerSetup/backup/*
-documentation/doxygen
