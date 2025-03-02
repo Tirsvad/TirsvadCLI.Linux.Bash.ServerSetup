@@ -1,78 +1,124 @@
+<!-- BADGES V1 -->
+[![Contributors][contributors-shield]][contributors-url]
+[![Forks][forks-shield]][forks-url]
+[![Stargazers][stars-shield]][stars-url]
+[![Downloads][downloads-shield]][downloads-url]
+[![Issues][issues-shield]][issues-url]
+[![MIT License][license-shield]][license-url]
+[![LinkedIn][linkedin-shield]][linkedin-url]
+
+<br />
+<div align="center">
+    <a href="https://github.com/TirsvadCLI/Linux.Bash.ServerSetup">
+        <img src="logo/logo.png" alt="Logo" width="80" height="80">
+    </a>
+    <h3 align="center">Server Setup</h3>
+    <p align="center">
+    To remote configure your fresh installed OS on server.
+    <br />
+    <br />
+    <!-- PROJECT SCREENSHOTS -->
+    <br />
+    <a href="https://github.com/TirsvadCLI/Linux.Bash.ServerSetup"><strong>Explore the docs »</strong></a>
+    <br />
+    <br />
+    <a href="https://github.com/TirsvadCLI/Linux.Bash.ServerSetup/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
+    ·
+    <a href="https://github.com/TirsvadCLI/Linux.Bash.ServerSetup/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
+    </p>
+</div>
+
 # Linux Server Setup
+
 This script aimed goal is to set up a complete web server environment. Script can be run from a local system with internet access to server.
 
+## Table of Contents
+
+- [Important](#important)
+- [Requirement](#requirement)
+- [Installation](#installation)
+- [Features](#features)
+- [Roadmap](#roadmap)
+- [Change Log](#change-log)
+- [Development](#development)
+- [Folder Structure](#folder-structure)
+
+## Important
+
+We are reconstruction the script from scratch
+
+If you need the old version you can find it at <https://github.com/TirsvadCLI/Linux.Bash.ServerSetup/archive/refs/tags/v0.1.0.tar.gz>
+
 ## Requirement
-Debian or Ubuntu fresh install. Other Linux distribution may be added.
 
-###
-We depend on following packages to be installed
-
-yq - a lightweight and portable command-line YAML processor, se more at https://github.com/mikefarah/yq/#install
-
-	snap install yq
+- Clean installed server with Debian or Ubuntu.
 
 ## Installation
 
 ### How to get this
 
-	curl -o ServerSetup.tar -L https://github.com/TirsvadCLI/Linux.ServerSetup/tarball/master
-	mkdir -p ServerSetup && tar xpvf ServerSetup.tar -C "ServerSetup" --strip-components=1
-	cd ServerSetup/src/ServerSetup
-	git submodule init
-	git submodule update
-	
-In configuration file you make your changes
-
-	cp conf/settings.default.yaml conf/settings.yaml
-	nano conf/settings.yaml
+ curl -o ServerSetup.tar -L <https://github.com/TirsvadCLI/Linux.Bash.ServerSetup/tarball/master>
+ mkdir -p ServerSetup && tar xpvf ServerSetup.tar -C "ServerSetup" --strip-components=1
+ cd ServerSetup/src/ServerSetup
 
 When you are ready to do the setup of server
 
-	./install.sh
-	
-## Tools
-In the tools folder you can find following scripts
+```bash
+./Run.sh
+```
 
-### Backup server files
-#### Certificate from lets encrypt
-It will backup your certificate and store it under conf/letsencrypt/backup_certificate.tar.gz
+First time run will create a settings.json and exit. You can now fill settings.json with required wishes.
 
-	cd src/ServerSetup/tools
-	bash backup_letsencrypt_cert.sh
-
-#### Nginx sites configuration
-It will backup your nginx sites configurations and store it under conf/nginx/backup_nginx_sites_configuration.tar.gz
-
-	cd src/ServerSetup/tools
-	bash backup_nginx_site_conf.sh
+```bash
+./Run.sh
+```
 
 ## Features
-* Create a privileged user
-  * creating ssh-key
-* ssh and hardness server
-  * ssh-key for passwordless connection
-* Setting hostname
-* Update system software
-* Nginx webserver (optional)
-	* Letsencrypt certificate
-* Database (optional)
-	* Postgresql 
-* Email server (optional)
-	* Postfix, dovecot and postfixadmin 
 
-### TODO
-* Optional database Mysql
-* Firewall
-  * Automatic configure based on choices made
-1. Optional web application envoriment
-  * .net
-  * django
-  * weblate
-  * pgadmin
-2. Optional e-mail server
-  * spam filter
-  * anti virus
+## Roadmap
+
+version 0.2.0
+
+- [ ] Client: Ensure user have sshkey
+- [ ] Client: Ensure need applicattion is avaible
+- [ ] Create user that have sudo rights
+- [ ] Hardness server
+
+Version 0.3.0
+
+- [ ] - FireWall nft setu
+
+## Change Log
+
+No new releases
 
 ### Development
+
 Want to contribute? Great!\
-Find us [here](https://github.com/TirsvadCLI/Linux.ServerSetup/)
+Find us [here](https://github.com/TirsvadCLI/Linux.Bash.ServerSetup/)
+
+## Folder Structure
+
+```text
+Linux.Bash.ServerSetup/     # Root folder that contains the solution
+|---ServerSetup/            # Contains the project
+|---images/                 # Contains images
+|---logo/                   # Contains the logo
+|---documentation/   # Contains documentation
+```
+
+<!-- MARKDOWN LINKS & IMAGES -->
+[contributors-shield]: https://img.shields.io/github/contributors/TirsvadCLI/Linux.Bash.ServerSetup?style=for-the-badge
+[contributors-url]: https://github.com/TirsvadCLI/Linux.Bash.ServerSetup/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/TirsvadCLI/Linux.Bash.ServerSetup?style=for-the-badge
+[forks-url]: https://github.com/TirsvadCLI/Linux.Bash.ServerSetup/network/members
+[stars-shield]: https://img.shields.io/github/stars/TirsvadCLI/Linux.Bash.ServerSetup?style=for-the-badge
+[stars-url]: https://github.com/TirsvadCLI/Linux.Bash.ServerSetup/stargazers
+[downloads-shield]: https://img.shields.io/github/downloads/TirsvadCLI/Linux.Bash.ServerSetup/total?style=for-the-badge
+[downloads-url]: https://github.com/TirsvadCLI/Linux.Bash.ServerSetup/graphs/traffic
+[issues-shield]: https://img.shields.io/github/issues/TirsvadCLI/Linux.Bash.ServerSetup?style=for-the-badge
+[issues-url]: https://github.com/TirsvadCLI/Linux.Bash.ServerSetup/issues
+[license-shield]: https://img.shields.io/github/license/TirsvadCLI/Linux.Bash.ServerSetup?style=for-the-badge
+[license-url]: https://github.com/TirsvadCLI/Linux.Bash.ServerSetup/blob/master/LICENSE
+[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
+[linkedin-url]: https://www.linkedin.com/in/jens-tirsvad-nielsen-13b795b9/
