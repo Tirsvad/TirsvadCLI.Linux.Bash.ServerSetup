@@ -10,3 +10,4 @@ src/ServerSetup/conf/settings.yaml
 src/ServerSetup/conf/letsencrypt/*/
 src/ServerSetup/conf/nginx/backup_nginx_sites_configuration.tar.gz
 src/ServerSetup/backup/*
+src/ServerSetup/conf/settings.json

@@ -1,0 +1,21 @@
+{
+	"server": {
+		"port_for_ssh": 22,
+		"port_for_ssh_hardness": 36422,
+		"host": "localhost"
+	},
+	"root": {
+		"password": "s3cret"
+	},
+	"super_user": {
+		"name": "JohnDoe",
+		"password": "s3cret"
+	},
+	"users": [
+		{
+			"username": "JaneDoe",
+			"password": "s3cret",
+			"member_of": "sudo"
+		}
+	]
+}
