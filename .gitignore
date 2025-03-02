@@ -1,6 +1,6 @@
 [Tt]emp/
 [Ll]og/
-.vscode
+.vscode/
 *.old
 
 src/ServerSetup/vendor/
