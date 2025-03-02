@@ -97,6 +97,8 @@ No new releases
 Want to contribute? Great!\
 Find us [here](https://github.com/TirsvadCLI/Linux.Bash.ServerSetup/)
 
+## Tests
+
 ## Folder Structure
 
 ```text
