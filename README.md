@@ -16,6 +16,9 @@
     <p align="center">
     To remote configure your fresh installed OS on server.
     <br />
+    <a href="https://github.com/TirsvadCLI/Linux.Bash.ServerSetup/blob/main/images/run.gif">
+        <img src="images/run.gif" alt="running" height="200">
+    </a>
     <br />
     <!-- PROJECT SCREENSHOTS -->
     <br />
@@ -39,7 +42,6 @@ This script aimed goal is to set up a complete web server environment. Script ca
 - [Installation](#installation)
 - [Features](#features)
 - [Roadmap](#roadmap)
-- [Change Log](#change-log)
 - [Development](#development)
 - [Folder Structure](#folder-structure)
 
@@ -75,22 +77,32 @@ First time run will create a settings.json and exit. You can now fill settings.j
 
 ## Features
 
+- [X] Create super user
+- [X] Hardness server
+
 ## Roadmap
 
 version 0.2.0
 
-- [ ] Client: Ensure user have sshkey
-- [ ] Client: Ensure need applicattion is avaible
-- [ ] Create user that have sudo rights
-- [ ] Hardness server
+- [X] Client: Ensure user have sshkey
+- [X] Client: Ensure need applicattion is avaible
+- [X] Create user that have sudo rights
+- [X] Hardness server
 
 Version 0.3.0
 
-- [ ] - FireWall nft setu
+- [ ] FireWall nft setup
+- [ ] Hardness: Ban2jail
 
-## Change Log
+Version 0.4.0
 
-No new releases
+- [ ] Add extra user optional
+- [ ] Nginx install optional
+- [ ] Postgresql install optional
+
+Version 0.5.0
+
+- [ ] E-mail server (Postfix, dovecot and postsql) optional
 
 ### Development
 

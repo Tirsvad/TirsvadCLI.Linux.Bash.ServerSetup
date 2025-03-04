@@ -30,6 +30,8 @@ init() {
 	# Load Constants
 	. "${TCLI_LINUX_BASH_SERVERSETUP_PATH_ROOT}/inc/constants.sh"
 
+
+
 	# Load Distribution
 	if [ -z "$TCLI_LINUX_BASH_DISTRIBUTION" ]; then
 		echo "Downloading Distribution"
@@ -39,6 +41,10 @@ init() {
 		cp -rf /tmp/Distribution "${TCLI_LINUX_BASH_SERVERSETUP_PATH_VENDOR}/"
 		rm -rf /tmp/Distribution
 	fi
+
+
+
+
 	echo "Loading Distribution"
 	. "${TCLI_LINUX_BASH_SERVERSETUP_PATH_VENDOR}/Distribution/Run.sh"
 	if [ $? -ne 0 ]; then
@@ -147,7 +153,7 @@ load_settings() {
 
 	SERVER_HOST=$(jq -r '.server.host' $file < /dev/null)
 	SERVER_PORT=$(jq -r '.server.port_for_ssh' $file < /dev/null)
-	SERVER_PORT_HARDNEED=$(jq -r '.server.port_for_ssh_hardneed' $file < /dev/null)
+	SERVER_PORT_HARDNESS=$(jq -r '.server.port_for_ssh_hardness' $file < /dev/null)
 	ROOT_PASSWORD=$(jq -r '.root.password' $file < /dev/null)
 	SU_NAME=$(jq -r '.super_user.name' $file < /dev/null)
 	SU_PASSWORD=$(jq -r '.super_user.password' $file < /dev/null)
@@ -183,11 +189,21 @@ remote_ssh_as_root() {
 	local password=$3
 	local command=$4
 
-	sshpass -p $password ssh -o StrictHostKeyChecking=no -o ConnectTimeout=20 root@$host -p $port "DEBIAN_FRONTEND=noninteractive $command; exit" > /dev/null
+	sshpass -p $password ssh -o StrictHostKeyChecking=no -o ConnectTimeout=30 root@$host -p $port "DEBIAN_FRONTEND=noninteractive $command; exit" > /dev/null
 
 	if [ $? -ne 0 ]; then
 		return 1
 	fi
+}
+
+remote_ssh_as_su_sudo_command() {
+	local host=$1
+	local port=$2
+	local user=$3
+	local password=$4
+	local command=$5
+
+	ssh $user@$host -p $port "echo $password | sudo -S $command"
 }
 
 ## @fn create_user()
@@ -253,15 +269,23 @@ can_connect_server() {
 	local server=$1
 	local port=$2
 	local password=$3
+	local port_hardness=$4
 
 	nc -z $server $port > /dev/null
 	if [ $? -ne 0 ]; then
-		return 1
+		nc -z $server $port_hardness > /dev/null
+		if [ $? -ne 0 ]; then
+			return 1
+		fi
+		SERVER_PORT=$SERVER_PORT_HARDNESS
 	fi
 
 	sshpass -p $password ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 root@$server -p $port exit > /dev/null
 	if [ $? -ne 0 ]; then
-		return 2
+		sshpass -p $password ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 root@$server -p $port_hardness exit > /dev/null
+		if [ $? -ne 0 ]; then
+			return 2
+		fi
 	fi
 }
 
@@ -297,6 +321,155 @@ upgrade_os(){
 		return 1
 	}
 }
+
+add_needed_packages() {
+	local host=$1
+	local port=$2
+	local password=$3
+	local as_root=$4
+	local user=$5
+
+	if [ $TCLI_LINUX_BASH_DISTRIBUTION_ID == "Debian GNU/Linux" ]; then
+		mapfile -t lines < "${TCLI_LINUX_BASH_SERVERSETUP_PATH_CONF}/packages/pre.debian.txt"
+	elif [ $TCLI_LINUX_BASH_DISTRIBUTION_ID == "Ubuntu" ]; then
+		mapfile -t lines < "${TCLI_LINUX_BASH_SERVERSETUP_PATH_CONF}/packages/pre.ubuntu.txt"
+	else
+		return 1
+	fi
+
+	for line in "${lines[@]}"; do
+		if $as_root; then
+			remote_ssh_as_root $host $port $password "apt-get install $line"
+		else
+			remote_ssh_as_su_sudo_command $host $port $SU_NAME $password "apt-get install $line"
+		fi
+	done
+}
+
+## Hardness the server
+
+## Basic firewall
+
+## @fn setup_basic_firewall()
+## @brief Setup a basic firewall
+## @details
+## This function sets up a basic firewall
+## @param host The server host
+## @param port The SSH port
+## @param password The root password
+## @return 1 if the basic firewall is not setup successfully
+setup_basic_firewall() {
+	local host=$1
+	local port=$2
+	local password=$3
+
+	sed "s/<TCLI_SERVERSETUP_SSHPORT_HARDNESS>/${port}/g" ${TCLI_LINUX_BASH_SERVERSETUP_PATH_CONF}/nft/basic.txt > ${TCLI_LINUX_BASH_SERVERSETUP_PATH_CONF}/nft/basic.tmp
+
+	mapfile -t lines < "${TCLI_LINUX_BASH_SERVERSETUP_PATH_CONF}/nft/basic.tmp"
+	for line in "${lines[@]}"; do
+		remote_ssh_as_root "$host" "$port" "$password" "$line"
+	done
+}
+
+firewall_save_rules() {
+	local host=$1
+	local port=$2
+	local password=$3
+
+	remote_ssh_as_root $host $port $password "nft list ruleset > /etc/nftables.conf" || {
+		return 1
+	}
+}
+
+firewall_load_conf_at_boot() {
+	local host=$1
+	local port=$2
+	local password=$3
+
+	remote_ssh_as_root $host $port $password "cp /usr/share/doc/nftables/examples/sysvinit/nftables.init /etc/init.d" || {
+		return 1
+	}
+	remote_ssh_as_root $host $port $password "update-rc.d nftables.init defaults" || {
+		return 1
+	}
+}
+
+fierwall_enable_service() {
+	local host=$1
+	local port=$2
+	local password=$3
+
+	remote_ssh_as_root $host $port $password "systemctl enable nftables" || {
+		return 1
+	}
+}	
+
+## @fn change_ssh_port()
+## @brief Change the SSH port on the remote server
+## @details
+## This function changes the SSH port on the remote server
+## @param host The server host
+## @param port The current SSH port
+## @param password The root password
+## @param new_port The new SSH port
+## @return 1 if the SSH port is not changed successfully
+change_ssh_port() {
+	local host=$1
+	local port=$2
+	local password=$3
+	local new_port=$4
+
+	remote_ssh_as_root $host $port $password "sed -i '/Port /c\Port $new_port' /etc/ssh/sshd_config" || {
+		return 1
+	}
+
+	remote_ssh_as_root $host $port $password "systemctl restart sshd" || {
+		return 1
+	}
+}
+
+## @fn change_ssh_port_with_sudo()
+## @brief Change the SSH port on the remote server using sudo
+## @details
+## This function changes the SSH port on the remote server using sudo
+## @param host The server host
+## @param port The current SSH port
+## @param user The user to use for SSH
+## @param password The user password
+## @param new_port The new SSH port
+## @return 1 if the SSH port is not changed successfully
+change_ssh_port_with_sudo() {
+	local host=$1
+	local port=$2
+	local user=$3
+	local password=$4
+	local new_port=$5
+
+	ssh $user@$host -p $port "echo $password | sudo -S sed -i 's/#\?Port 22/Port $new_port/' /etc/ssh/sshd_config && echo $password | sudo -S systemctl restart sshd" || {
+	 	return 1
+	}
+}
+
+change_ssh_root_permit_to_no() {
+	local host=$1
+	local port=$2
+	local password=$3
+
+	remote_ssh_as_root $host $port $password "sed -i '/PermitRootLogin /c\PermitRootLogin no' /etc/ssh/sshd_config" || {
+		return 1
+	}
+
+	remote_ssh_as_root $host $port $password "systemctl restart sshd" || {
+		return 1
+	}
+}
+
+# # Example usage
+# change_ssh_port_with_sudo $SERVER_HOST $SERVER_PORT "tirsvad" $ROOT_PASSWORD 10322
+
+# # Example usage
+# change_ssh_port $SERVER_HOST $SERVER_PORT $ROOT_PASSWORD 10322
+
 
 # Check if the script is being sourced or executed
 # If the script is executed, print an error message and exit with an error code.

@@ -2,6 +2,7 @@
 [Ll]og/
 .vscode/
 *.old
+*.tmp
 
 src/ServerSetup/vendor/
 
