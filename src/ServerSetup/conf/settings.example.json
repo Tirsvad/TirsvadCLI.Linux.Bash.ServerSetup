@@ -1,7 +1,7 @@
 {
 	"server": {
 		"port_for_ssh": 22,
-		"port_for_ssh_hardness": 36422,
+		"port_for_ssh_hardneed": 36422,
 		"host": "localhost"
 	},
 	"root": {
