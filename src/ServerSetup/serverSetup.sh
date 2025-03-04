@@ -10,10 +10,6 @@
 ## - webserver nginx with encryption (ssl)
 ## - Email server postfix with gui postfix admin
 ## - Database server postgresql
-##
-## @todo
-## - Add streaming server
-## - More configuration for email server
 
 
 ## @fn init()
@@ -24,7 +20,6 @@
 ## - Load Constants
 ## - Load Distribution
 ## - Load Logger
-## @return 0 if the Server Setup is initialized
 ## @return 1 if the Server Setup is not initialized
 init() {
 	declare IFS=$'\n\t'
@@ -71,7 +66,6 @@ init() {
 ## @details
 ## This function checks if the settings file exists
 ## - If the settings file does not exist, it will be copied from the example file
-## @return 0 if the settings file exists
 ## @return 1 if the settings file does not exist
 is_settigns_file() {
 	if [ ! -f "${TCLI_LINUX_BASH_SERVERSETUP_PATH_CONF}/settings.json" ]; then
@@ -86,7 +80,6 @@ is_settigns_file() {
 ## This function checks if the dependencies are installed on the system
 ## - sshpass
 ## - nc (netcat)
-## @return 0 if all dependencies are installed
 ## @return 1 if any dependencies are missing
 precheck() {
 	local err=0
@@ -113,7 +106,6 @@ precheck() {
 ## This function checks if an application is installed on the system
 ## @param application The application to check for
 ## @param appPackage The package to install the application
-## @return 0 if the application is installed
 ## @return 1 if the application is not installed
 is_applications_avaible() {
 	local application=$1
@@ -127,6 +119,13 @@ is_applications_avaible() {
 	fi
 }
 
+## @fn is_dependicies_avaible()
+## @brief Check if a script is installed
+## @details
+## This function checks if a script is installed on the system
+## @param script The script to check for
+## @param scriptName The name of the script
+## @exit 1 if the script is not installed
 is_dependicies_avaible() {
 	script=$1
 	scriptName=$2
@@ -138,16 +137,28 @@ is_dependicies_avaible() {
 	fi
 }
 
+## @fn load_settings()
+## @brief Load the settings from the settings file
+## @details
+## This function loads the settings from the settings file
+## @param file The settings file
 load_settings() {
 	file=$1
 
 	SERVER_HOST=$(jq -r '.server.host' $file < /dev/null)
 	SERVER_PORT=$(jq -r '.server.port_for_ssh' $file < /dev/null)
+	SERVER_PORT_HARDNEED=$(jq -r '.server.port_for_ssh_hardneed' $file < /dev/null)
 	ROOT_PASSWORD=$(jq -r '.root.password' $file < /dev/null)
 	SU_NAME=$(jq -r '.super_user.name' $file < /dev/null)
 	SU_PASSWORD=$(jq -r '.super_user.password' $file < /dev/null)
 }
 
+## @fn validate_settings()
+## @brief Validate the settings
+## @details
+## This function validates the settings from settings file
+## - Check if the server host and port is set
+## @return 1 if the settings are not valid
 validate_settings() {
 	load_settings $TCLI_LINUX_BASH_SERVERSETUP_FILE_SETTINGS
 
@@ -157,19 +168,38 @@ validate_settings() {
 	fi
 }
 
+## @fn remote_ssh_as_root()
+## @brief Run a command on a remote server as root
+## @details
+## This function runs a command on a remote server as root
+## @param host The server host
+## @param port The server port
+## @param password The root password
+## @param command The command to run
+## @return 1 if the command is not run successfully
 remote_ssh_as_root() {
 	local host=$1
 	local port=$2
 	local password=$3
 	local command=$4
 
-	sshpass -p $password ssh -o StrictHostKeyChecking=no -o ConnectTimeout=20 root@$host -p $port "$command; exit"
+	sshpass -p $password ssh -o StrictHostKeyChecking=no -o ConnectTimeout=20 root@$host -p $port "DEBIAN_FRONTEND=noninteractive $command; exit" > /dev/null
 
 	if [ $? -ne 0 ]; then
 		return 1
 	fi
 }
 
+## @fn create_user()
+## @brief Create a user on a remote server
+## @details
+## This function creates a user on a remote server
+## @param host The server host
+## @param port The server port
+## @param password The root password
+## @param user The user to create
+## @param userPassword The user password
+## @return 1 if the user is not created successfully
 has_user_ssh_key_else_create_one() {
 	if [ ! -f ~/.ssh/id_rsa ]; then
 		create_ssh_key || {
@@ -178,6 +208,11 @@ has_user_ssh_key_else_create_one() {
 	fi
 }
 
+## @fn create_ssh_key()
+## @brief Create a ssh key
+## @details
+## This function creates a ssh key
+## @return 1 if the ssh key is not created successfully
 create_ssh_key() {
 	ssh-keygen -t rsa -b 2048 -f ~/.ssh/id_rsa -N ""
 	if [ $? -ne 0 ]; then
@@ -185,6 +220,15 @@ create_ssh_key() {
 	fi
 }
 
+## @fn upload_ssh_key_to_server()
+## @brief Upload a ssh key to a remote server
+## @details
+## This function uploads a ssh key to a remote server
+## @param host The server host
+## @param port The server port
+## @param user The user to upload the ssh key to
+## @param password The user password
+## @return 1 if the ssh key is not uploaded successfully
 upload_ssh_key_to_server() {
 	local host=$1
 	local port=$2
@@ -196,6 +240,15 @@ upload_ssh_key_to_server() {
 	fi
 }
 
+## @fn can_connect_server()
+## @brief Check if a server can be connected to
+## @details
+## This function checks if a server can be connected to
+## @param server The server host
+## @param port The server port
+## @param password The root password
+## @return 1 if the server can not be connected to
+## @return 2 if the server can not be connected to via ssh
 can_connect_server() {
 	local server=$1
 	local port=$2
@@ -212,6 +265,38 @@ can_connect_server() {
 	fi
 }
 
+## @fn reconfigure_dpkg()
+## @brief Reconfigure dpkg
+## @details
+## This function reconfigures dpkg
+## @return 1 if dpkg is not reconfigured
+reconfigure_dpkg() {
+	remote_ssh_as_root $SERVER_HOST $SERVER_PORT $ROOT_PASSWORD "dpkg --configure -a" || {
+		return 1
+	}
+}
+
+## @fn update_os()
+## @brief Update the OS
+## @details
+## This function updates the OS
+## @return 1 if the OS is not updated
+update_os() {
+	remote_ssh_as_root $SERVER_HOST $SERVER_PORT $ROOT_PASSWORD "apt-get update" || {
+		return 1
+	}
+}
+
+## @fn update_upgrade_os()
+## @brief Update and upgrade the OS
+## @details
+## This function upgrades the OS
+## @return 1 if the OS is not upgraded
+upgrade_os(){
+	remote_ssh_as_root $SERVER_HOST $SERVER_PORT $ROOT_PASSWORD "apt-get upgrade -y" || {
+		return 1
+	}
+}
 
 # Check if the script is being sourced or executed
 # If the script is executed, print an error message and exit with an error code.

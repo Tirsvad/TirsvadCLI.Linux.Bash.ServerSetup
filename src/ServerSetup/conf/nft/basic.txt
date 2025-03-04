@@ -1,0 +1,13 @@
+nft flush ruleset
+nft add table inet filter
+nft add chain inet filter input '{ type filter hook input priority 0 ; policy accept;}'
+nft add rule inet filter input ct state established,related accept
+nft add rule inet filter input ct state invalid drop
+nft add rule inet filter input iifname lo accept
+nft add rule inet filter input iif != \"lo\" ip daddr 127.0.0.0/8 drop
+nft add rule inet filter input ip protocol icmp limit rate 4/second accept
+nft add rule inet filter input ip6 nexthdr icmpv6 limit rate 4/second accept
+nft add rule inet filter input tcp dport <TCLI_SERVERSETUP_SSHPORT_HARDNESS> accept
+nft add chain inet filter forward { type filter hook forward priority 0 \; policy accept\; }
+nft add chain inet filter output { type filter hook output priority 0 \; policy accept\; }
+nft add chain inet filter input '{ policy drop; }'
