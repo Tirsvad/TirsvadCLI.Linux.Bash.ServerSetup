@@ -70,7 +70,7 @@ checking_settings_handler() {
 ## @exit 2 if the SSH can not be connected
 check_server_connection_handler() {
 	tcli_linux_bash_logger_infoscreen "Checking Server Connection"
-	can_connect_server $SERVER_HOST $SERVER_PORT $ROOT_PASSWORD || {
+	can_connect_server $SERVER_HOST $SERVER_PORT $ROOT_PASSWORD $SERVER_PORT_HARDNESS || {
 		err=$?
 		tcli_linux_bash_logger_infoscreenFailed
 		if [ $err -eq 1 ]; then
@@ -122,6 +122,17 @@ upgrade_os_handler() {
 	tcli_linux_bash_logger_infoscreenDone
 }
 
+add_needed_packages_handler() {
+	tcli_linux_bash_logger_infoscreen "Adding Needed Packages"
+	add_needed_packages $SERVER_HOST $SERVER_PORT $ROOT_PASSWORD || {
+		tcli_linux_bash_logger_infoscreenFailed
+		printf "\n${RED}Failed to install needed packages${NC}\n"
+		exit 1
+	}
+	tcli_linux_bash_logger_infoscreenDone
+}
+
+
 ## @fn create_user_handler()
 ## @brief Create a user
 ## @details
@@ -149,11 +160,11 @@ create_user_handler() {
 ## @exit 1 if the SSH key is not uploaded
 user_sshkey_handler() {
 	tcli_linux_bash_logger_infoscreen "Checking SSH Key"
-	#has_user_ssh_key_else_create_one || {
-	#	tcli_linux_bash_logger_infoscreenFailed
-	#	printf "\n${RED}Failed to create SSH key${NC}\n"
-	#	exit 1
-	#}
+	has_user_ssh_key_else_create_one || {
+		tcli_linux_bash_logger_infoscreenFailed
+		printf "\n${RED}Failed to create SSH key${NC}\n"
+		exit 1
+	}
 	upload_ssh_key_to_server $SERVER_HOST $SERVER_PORT $SU_NAME $SU_PASSWORD || {
 		tcli_linux_bash_logger_infoscreenFailed
 		printf "\n${RED}Failed to upload SSH key to server${NC}\n"
@@ -161,18 +172,66 @@ user_sshkey_handler() {
 	}
 	tcli_linux_bash_logger_infoscreenDone
 }
+
+## @fn hardness_handler()
+## @brief Harden the server
+## @details
+## This function hardens the server
+## @exit 1 if the server is not hardened
+hardness_handler() {
+	tcli_linux_bash_logger_infoscreen "Hardening Server"
+
+	change_ssh_port $SERVER_HOST $SERVER_PORT $ROOT_PASSWORD $SERVER_PORT_HARDNESS || {
+		tcli_linux_bash_logger_infoscreenFailed
+		printf "\n${RED}Failed to change SSH port${NC}\n"
+		exit 1
+	}
+
+	setup_basic_firewall $SERVER_HOST $SERVER_PORT_HARDNESS $ROOT_PASSWORD || {
+		tcli_linux_bash_logger_infoscreenFailed
+		printf "\n${RED}Failed to setup basic firewall${NC}\n"
+		exit 1
+	}
+
+	firewall_save_rules $SERVER_HOST $SERVER_PORT_HARDNESS $ROOT_PASSWORD || {
+		tcli_linux_bash_logger_infoscreenFailed
+		printf "\n${RED}Failed to save firewall rules${NC}\n"
+		exit 1
+	}
+
+	firewall_load_conf_at_boot $SERVER_HOST $SERVER_PORT_HARDNESS $ROOT_PASSWORD || {
+		tcli_linux_bash_logger_infoscreenFailed
+		printf "\n${RED}Failed to load firewall config at boot${NC}\n"
+		exit 1
+	}
+
+	change_ssh_root_permit_to_no $SERVER_HOST $SERVER_PORT_HARDNESS $ROOT_PASSWORD || {
+		tcli_linux_bash_logger_infoscreenFailed
+		printf "\n${RED}Failed to change SSH root permit to no${NC}\n"
+		exit 1
+	}
+
+	tcli_linux_bash_logger_infoscreenDone
+}
+
 init_handler
 is_settigns_file_handler
 tcli_linux_bash_logger_init "${TCLI_LINUX_BASH_SERVERSETUP_PATH_LOG}/log" "ServerSetup"
 
 # Clear the screen
+
 clear
 
 tcli_linux_bash_logger_title "Server Setup"
 checking_dependencies_handler
 checking_settings_handler
 check_server_connection_handler
+
+# From here we make the changes on the server
+
 update_os_handler
 upgrade_os_handler
+add_needed_packages_handler
 create_user_handler
 user_sshkey_handler
+hardness_handler
