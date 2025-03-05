@@ -72,16 +72,17 @@ check_server_connection_handler() {
 	tcli_linux_bash_logger_infoscreen "Checking Server Connection"
 	can_connect_server $SERVER_HOST $SERVER_PORT $ROOT_PASSWORD $SERVER_PORT_HARDNESS || {
 		err=$?
-		tcli_linux_bash_logger_infoscreenFailed
 		if [ $err -eq 1 ]; then
+			tcli_linux_bash_logger_infoscreenFailed
 			printf "\n${RED}Could not connect to the server ${SERVER_HOST}:${SERVER_PORT} ${NC}\n"
 			exit $err
 		fi
 		if [ $err -eq 2 ]; then
-			printf "\n${RED}SSH could not be connected{NC}\n"
-			exit $err
+			tcli_linux_bash_logger_infoscreenWarn
+			tcli_linux_bash_logger_file_warn "if we already have a user with sudo rights, we can ignore this warning" "SSH could not be connected with root user"
+			return 0
 		fi
-		printf "\n${RED}Could not connect to the server. UNKNOW why!${NC}\n"
+		printf "\n${RED}Could not connect to the server. UNKNOW error!${NC}\n"
 		exit $err
 	}
 	tcli_linux_bash_logger_infoscreenDone
@@ -229,9 +230,9 @@ check_server_connection_handler
 
 # From here we make the changes on the server
 
-update_os_handler
-upgrade_os_handler
-add_needed_packages_handler
-create_user_handler
-user_sshkey_handler
-hardness_handler
+#update_os_handler
+#upgrade_os_handler
+#add_needed_packages_handler
+#create_user_handler
+#user_sshkey_handler
+#hardness_handler
