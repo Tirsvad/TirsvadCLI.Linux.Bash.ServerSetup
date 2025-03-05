@@ -6,7 +6,6 @@
 ## This file contains functions to connect to a remote server
 ## @author Jens Tirsvad Nielsen
 
-
 ## @fn remote_ssh_as_root()
 ## @brief Run a command on a remote server as root
 ## @details
@@ -46,5 +45,5 @@ remote_ssh_as_su_sudo_command() {
 	local password=$4
 	local command=$5
 
-	ssh $user@$host -p $port "echo $password | sudo -S $command"
+	ssh $user@$host -p $port "echo $password | sudo -S $command" > /dev/null
 }
