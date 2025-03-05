@@ -123,6 +123,11 @@ upgrade_os_handler() {
 	tcli_linux_bash_logger_infoscreenDone
 }
 
+## @fn add_needed_packages_handler()
+## @brief Add needed packages
+## @details
+## This function adds needed packages
+## @exit 1 if the needed packages are not added
 add_needed_packages_handler() {
 	tcli_linux_bash_logger_infoscreen "Adding Needed Packages"
 	add_needed_packages $SERVER_HOST $SERVER_PORT $ROOT_PASSWORD || {
@@ -132,7 +137,6 @@ add_needed_packages_handler() {
 	}
 	tcli_linux_bash_logger_infoscreenDone
 }
-
 
 ## @fn create_user_handler()
 ## @brief Create a user
@@ -215,6 +219,16 @@ hardness_handler() {
 	tcli_linux_bash_logger_infoscreenDone
 }
 
+setup_fail2ban_handler() {
+	tcli_linux_bash_logger_infoscreen "Setting up Fail2Ban"
+	install_fail2ban $SERVER_HOST $SERVER_PORT_HARDNESS $SU_NAME $ROOT_PASSWORD || {
+		tcli_linux_bash_logger_infoscreenFailed
+		printf "\n${RED}Failed to setup Fail2Ban${NC}\n"
+		exit 1
+	}
+	tcli_linux_bash_logger_infoscreenDone
+}
+
 init_handler
 is_settigns_file_handler
 tcli_linux_bash_logger_init "${TCLI_LINUX_BASH_SERVERSETUP_PATH_LOG}/log" "ServerSetup"
@@ -236,3 +250,4 @@ check_server_connection_handler
 #create_user_handler
 #user_sshkey_handler
 #hardness_handler
+setup_fail2ban_handler

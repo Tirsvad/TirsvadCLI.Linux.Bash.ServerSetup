@@ -49,7 +49,7 @@ $(function() {
 <div class="contents">
 <a href="server_setup_8sh.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#/bin/bash</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span> </div>
-<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">## @file</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">## @file serverSetup.sh</span></div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">## @author Jens Tirsvad Nielsen</span></div>
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">## @brief Setup a secure server</span></div>
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">## @details</span></div>
@@ -423,25 +423,26 @@ $(function() {
 <div class="line"><a id="l00374" name="l00374"></a><span class="lineno">  374</span>  }</div>
 <div class="line"><a id="l00375" name="l00375"></a><span class="lineno">  375</span>}</div>
 <div class="line"><a id="l00376" name="l00376"></a><span class="lineno">  376</span> </div>
-<div class="line"><a id="l00377" name="l00377"></a><span class="lineno">  377</span> </div>
-<div class="line"><a id="l00378" name="l00378"></a><span class="lineno">  378</span>install_fail2ban() {</div>
-<div class="line"><a id="l00379" name="l00379"></a><span class="lineno">  379</span>  local host=$1</div>
-<div class="line"><a id="l00380" name="l00380"></a><span class="lineno">  380</span>  local port=$2</div>
-<div class="line"><a id="l00381" name="l00381"></a><span class="lineno">  381</span>  local password=$3</div>
-<div class="line"><a id="l00382" name="l00382"></a><span class="lineno">  382</span> </div>
-<div class="line"><a id="l00383" name="l00383"></a><span class="lineno">  383</span>  <a class="code hl_function" href="remote__connect_8sh.html#ae6ce98a84a669cbbb2a5e8cdd6cbdd39">remote_ssh_as_root</a> $host $port $password <span class="stringliteral">&quot;apt-get install fail2ban -y&quot;</span> || {</div>
-<div class="line"><a id="l00384" name="l00384"></a><span class="lineno">  384</span>    <span class="keywordflow">return</span> 1</div>
-<div class="line"><a id="l00385" name="l00385"></a><span class="lineno">  385</span>  }</div>
-<div class="line"><a id="l00386" name="l00386"></a><span class="lineno">  386</span>}</div>
-<div class="line"><a id="l00387" name="l00387"></a><span class="lineno">  387</span> </div>
-<div class="line"><a id="l00388" name="l00388"></a><span class="lineno">  388</span><span class="preprocessor"># Check if the script is being sourced or executed</span></div>
-<div class="line"><a id="l00389" name="l00389"></a><span class="lineno">  389</span><span class="preprocessor"># If the script is executed, print an error message and exit with an error code.</span></div>
-<div class="line"><a id="l00390" name="l00390"></a><span class="lineno">  390</span><span class="keywordflow">if</span> [[ <span class="stringliteral">&quot;${BASH_SOURCE[0]}&quot;</span> == <span class="stringliteral">&quot;${0}&quot;</span> ]]; then</div>
-<div class="line"><a id="l00391" name="l00391"></a><span class="lineno">  391</span>  echo <span class="stringliteral">&quot;This script is intended to be sourced, not executed.&quot;</span></div>
-<div class="line"><a id="l00392" name="l00392"></a><span class="lineno">  392</span>  exit 1</div>
-<div class="line"><a id="l00393" name="l00393"></a><span class="lineno">  393</span>fi</div>
-<div class="ttc" id="aremote__connect_8sh_html_ae19997270c29a7c8afae5a88b0311b2d"><div class="ttname"><a href="remote__connect_8sh.html#ae19997270c29a7c8afae5a88b0311b2d">remote_ssh_as_su_sudo_command</a></div><div class="ttdeci">remote_ssh_as_su_sudo_command(host, port, user, password, command)</div><div class="ttdoc">Run a command on a remote server as su.</div><div class="ttdef"><b>Definition:</b> <a href="remote__connect_8sh_source.html#l00035">remote_connect.sh:35</a></div></div>
-<div class="ttc" id="aremote__connect_8sh_html_ae6ce98a84a669cbbb2a5e8cdd6cbdd39"><div class="ttname"><a href="remote__connect_8sh.html#ae6ce98a84a669cbbb2a5e8cdd6cbdd39">remote_ssh_as_root</a></div><div class="ttdeci">remote_ssh_as_root(host, port, password, command)</div><div class="ttdoc">Run a command on a remote server as root.</div><div class="ttdef"><b>Definition:</b> <a href="remote__connect_8sh_source.html#l00012">remote_connect.sh:12</a></div></div>
+<div class="line"><a id="l00377" name="l00377"></a><span class="lineno">  377</span>install_fail2ban() {</div>
+<div class="line"><a id="l00378" name="l00378"></a><span class="lineno">  378</span>  local host=$1</div>
+<div class="line"><a id="l00379" name="l00379"></a><span class="lineno">  379</span>  local port=$2</div>
+<div class="line"><a id="l00380" name="l00380"></a><span class="lineno">  380</span>  local user=$3</div>
+<div class="line"><a id="l00381" name="l00381"></a><span class="lineno">  381</span>  local password=$4</div>
+<div class="line"><a id="l00382" name="l00382"></a><span class="lineno">  382</span>  local command=$5</div>
+<div class="line"><a id="l00383" name="l00383"></a><span class="lineno">  383</span> </div>
+<div class="line"><a id="l00384" name="l00384"></a><span class="lineno">  384</span>  <a class="code hl_function" href="remote__connect_8sh.html#ae19997270c29a7c8afae5a88b0311b2d">remote_ssh_as_su_sudo_command</a> $host $port $user $password <span class="stringliteral">&quot;apt-get install fail2ban -y&quot;</span> || {</div>
+<div class="line"><a id="l00385" name="l00385"></a><span class="lineno">  385</span>    <span class="keywordflow">return</span> 1</div>
+<div class="line"><a id="l00386" name="l00386"></a><span class="lineno">  386</span>  }</div>
+<div class="line"><a id="l00387" name="l00387"></a><span class="lineno">  387</span>}</div>
+<div class="line"><a id="l00388" name="l00388"></a><span class="lineno">  388</span> </div>
+<div class="line"><a id="l00389" name="l00389"></a><span class="lineno">  389</span><span class="preprocessor"># Check if the script is being sourced or executed</span></div>
+<div class="line"><a id="l00390" name="l00390"></a><span class="lineno">  390</span><span class="preprocessor"># If the script is executed, print an error message and exit with an error code.</span></div>
+<div class="line"><a id="l00391" name="l00391"></a><span class="lineno">  391</span><span class="keywordflow">if</span> [[ <span class="stringliteral">&quot;${BASH_SOURCE[0]}&quot;</span> == <span class="stringliteral">&quot;${0}&quot;</span> ]]; then</div>
+<div class="line"><a id="l00392" name="l00392"></a><span class="lineno">  392</span>  echo <span class="stringliteral">&quot;This script is intended to be sourced, not executed.&quot;</span></div>
+<div class="line"><a id="l00393" name="l00393"></a><span class="lineno">  393</span>  exit 1</div>
+<div class="line"><a id="l00394" name="l00394"></a><span class="lineno">  394</span>fi</div>
+<div class="ttc" id="aremote__connect_8sh_html_ae19997270c29a7c8afae5a88b0311b2d"><div class="ttname"><a href="remote__connect_8sh.html#ae19997270c29a7c8afae5a88b0311b2d">remote_ssh_as_su_sudo_command</a></div><div class="ttdeci">remote_ssh_as_su_sudo_command(host, port, user, password, command)</div><div class="ttdoc">Run a command on a remote server as su.</div><div class="ttdef"><b>Definition:</b> <a href="remote__connect_8sh_source.html#l00041">remote_connect.sh:41</a></div></div>
+<div class="ttc" id="aremote__connect_8sh_html_ae6ce98a84a669cbbb2a5e8cdd6cbdd39"><div class="ttname"><a href="remote__connect_8sh.html#ae6ce98a84a669cbbb2a5e8cdd6cbdd39">remote_ssh_as_root</a></div><div class="ttdeci">remote_ssh_as_root(host, port, password, command)</div><div class="ttdoc">Run a command on a remote server as root.</div><div class="ttdef"><b>Definition:</b> <a href="remote__connect_8sh_source.html#l00018">remote_connect.sh:18</a></div></div>
 <div class="ttc" id="aserver_setup_8sh_html_a38a57547e9bb956a539cc6011e888489"><div class="ttname"><a href="server_setup_8sh.html#a38a57547e9bb956a539cc6011e888489">is_dependicies_avaible</a></div><div class="ttdeci">is_dependicies_avaible(script, scriptName)</div><div class="ttdoc">Check if a script is installed.</div><div class="ttdef"><b>Definition:</b> <a href="server_setup_8sh_source.html#l00132">serverSetup.sh:132</a></div></div>
 <div class="ttc" id="aserver_setup_8sh_html_a4b402279fbda529b37593a129e1d47a2"><div class="ttname"><a href="server_setup_8sh.html#a4b402279fbda529b37593a129e1d47a2">load_settings</a></div><div class="ttdeci">load_settings(file)</div><div class="ttdoc">Load the settings from the settings file.</div><div class="ttdef"><b>Definition:</b> <a href="server_setup_8sh_source.html#l00148">serverSetup.sh:148</a></div></div>
 <div class="ttc" id="aserver_setup_8sh_html_a4be4055f3361d4800e16bc2e2e38cda6"><div class="ttname"><a href="server_setup_8sh.html#a4be4055f3361d4800e16bc2e2e38cda6">init</a></div><div class="ttdeci">init()</div><div class="ttdoc">Initialize the Server Setup.</div><div class="ttdef"><b>Definition:</b> <a href="server_setup_8sh_source.html#l00023">serverSetup.sh:23</a></div></div>

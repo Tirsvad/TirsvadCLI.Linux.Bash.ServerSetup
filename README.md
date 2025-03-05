@@ -86,7 +86,7 @@ First time run will create a settings.json and exit. You can now fill settings.j
 Version 0.3.0
 
 - [X] FireWall nft setup
-- [ ] Hardness: Ban2jail
+- [X] Hardness: Ban2jail
 
 Version 0.4.0
 
