@@ -13,4 +13,4 @@ TCLI_LINUX_BASH_SERVERSETUP_FILE_SETTINGS="${TCLI_LINUX_BASH_SERVERSETUP_PATH_CO
 
 # Dependencies
 TCLI_LINUX_BASH_DISTRIBUTION_DOWNLOAD="https://github.com/TirsvadCLI/Linux.Bash.Distribution/archive/refs/tags/v0.2.0.tar.gz" ## @brief URL to the Distribution
-TCLI_LINUX_BASH_LOGGER_DOWNLOAD="https://github.com/TirsvadCLI/Linux.Bash.Logger/archive/refs/tags/v0.3.1.tar.gz" ## @brief URL to the Logger
+TCLI_LINUX_BASH_LOGGER_DOWNLOAD="https://github.com/TirsvadCLI/Linux.Bash.Logger/archive/refs/tags/v0.3.2.tar.gz" ## @brief URL to the Logger

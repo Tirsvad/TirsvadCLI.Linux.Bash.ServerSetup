@@ -79,20 +79,14 @@ First time run will create a settings.json and exit. You can now fill settings.j
 
 - [X] Create super user
 - [X] Hardness server
+- [X] Firewall nft
 
 ## Roadmap
 
-version 0.2.0
-
-- [X] Client: Ensure user have sshkey
-- [X] Client: Ensure need applicattion is avaible
-- [X] Create user that have sudo rights
-- [X] Hardness server
-
 Version 0.3.0
 
-- [ ] FireWall nft setup
-- [ ] Hardness: Ban2jail
+- [X] FireWall nft setup
+- [X] Hardness: Ban2jail
 
 Version 0.4.0
 
@@ -103,6 +97,10 @@ Version 0.4.0
 Version 0.5.0
 
 - [ ] E-mail server (Postfix, dovecot and postsql) optional
+
+Version 0.6.0
+
+- [ ] 
 
 ### Development
 

@@ -1,6 +1,6 @@
 #/bin/bash
 
-## @file
+## @file serverSetup.sh
 ## @author Jens Tirsvad Nielsen
 ## @brief Setup a secure server
 ## @details
@@ -10,7 +10,6 @@
 ## - webserver nginx with encryption (ssl)
 ## - Email server postfix with gui postfix admin
 ## - Database server postgresql
-
 
 ## @fn init()
 ## @brief Initialize the Server Setup
@@ -30,7 +29,8 @@ init() {
 	# Load Constants
 	. "${TCLI_LINUX_BASH_SERVERSETUP_PATH_ROOT}/inc/constants.sh"
 
-
+	. "$TCLI_LINUX_BASH_SERVERSETUP_PATH_INC/nft.sh"
+	. "$TCLI_LINUX_BASH_SERVERSETUP_PATH_INC/remote_connect.sh"
 
 	# Load Distribution
 	if [ -z "$TCLI_LINUX_BASH_DISTRIBUTION" ]; then
@@ -41,9 +41,6 @@ init() {
 		cp -rf /tmp/Distribution "${TCLI_LINUX_BASH_SERVERSETUP_PATH_VENDOR}/"
 		rm -rf /tmp/Distribution
 	fi
-
-
-
 
 	echo "Loading Distribution"
 	. "${TCLI_LINUX_BASH_SERVERSETUP_PATH_VENDOR}/Distribution/Run.sh"
@@ -174,38 +171,6 @@ validate_settings() {
 	fi
 }
 
-## @fn remote_ssh_as_root()
-## @brief Run a command on a remote server as root
-## @details
-## This function runs a command on a remote server as root
-## @param host The server host
-## @param port The server port
-## @param password The root password
-## @param command The command to run
-## @return 1 if the command is not run successfully
-remote_ssh_as_root() {
-	local host=$1
-	local port=$2
-	local password=$3
-	local command=$4
-
-	sshpass -p $password ssh -o StrictHostKeyChecking=no -o ConnectTimeout=30 root@$host -p $port "DEBIAN_FRONTEND=noninteractive $command; exit" > /dev/null
-
-	if [ $? -ne 0 ]; then
-		return 1
-	fi
-}
-
-remote_ssh_as_su_sudo_command() {
-	local host=$1
-	local port=$2
-	local user=$3
-	local password=$4
-	local command=$5
-
-	ssh $user@$host -p $port "echo $password | sudo -S $command"
-}
-
 ## @fn create_user()
 ## @brief Create a user on a remote server
 ## @details
@@ -271,18 +236,19 @@ can_connect_server() {
 	local password=$3
 	local port_hardness=$4
 
-	nc -z $server $port > /dev/null
+	nc -z -w 2 $server $port > /dev/null
 	if [ $? -ne 0 ]; then
-		nc -z $server $port_hardness > /dev/null
+		nc -z -w 2 $server $port_hardness > /dev/null
 		if [ $? -ne 0 ]; then
 			return 1
 		fi
 		SERVER_PORT=$SERVER_PORT_HARDNESS
-	fi
-
-	sshpass -p $password ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 root@$server -p $port exit > /dev/null
-	if [ $? -ne 0 ]; then
-		sshpass -p $password ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 root@$server -p $port_hardness exit > /dev/null
+		sshpass -p $password ssh -o StrictHostKeyChecking=no -o ConnectTimeout=4 root@$server -p $port_hardness exit > /dev/null
+		if [ $? -ne 0 ]; then
+			return 2
+		fi
+	else
+		sshpass -p $password ssh -o StrictHostKeyChecking=no -o ConnectTimeout=4 root@$server -p $port exit > /dev/null
 		if [ $? -ne 0 ]; then
 			return 2
 		fi
@@ -348,62 +314,6 @@ add_needed_packages() {
 
 ## Hardness the server
 
-## Basic firewall
-
-## @fn setup_basic_firewall()
-## @brief Setup a basic firewall
-## @details
-## This function sets up a basic firewall
-## @param host The server host
-## @param port The SSH port
-## @param password The root password
-## @return 1 if the basic firewall is not setup successfully
-setup_basic_firewall() {
-	local host=$1
-	local port=$2
-	local password=$3
-
-	sed "s/<TCLI_SERVERSETUP_SSHPORT_HARDNESS>/${port}/g" ${TCLI_LINUX_BASH_SERVERSETUP_PATH_CONF}/nft/basic.txt > ${TCLI_LINUX_BASH_SERVERSETUP_PATH_CONF}/nft/basic.tmp
-
-	mapfile -t lines < "${TCLI_LINUX_BASH_SERVERSETUP_PATH_CONF}/nft/basic.tmp"
-	for line in "${lines[@]}"; do
-		remote_ssh_as_root "$host" "$port" "$password" "$line"
-	done
-}
-
-firewall_save_rules() {
-	local host=$1
-	local port=$2
-	local password=$3
-
-	remote_ssh_as_root $host $port $password "nft list ruleset > /etc/nftables.conf" || {
-		return 1
-	}
-}
-
-firewall_load_conf_at_boot() {
-	local host=$1
-	local port=$2
-	local password=$3
-
-	remote_ssh_as_root $host $port $password "cp /usr/share/doc/nftables/examples/sysvinit/nftables.init /etc/init.d" || {
-		return 1
-	}
-	remote_ssh_as_root $host $port $password "update-rc.d nftables.init defaults" || {
-		return 1
-	}
-}
-
-fierwall_enable_service() {
-	local host=$1
-	local port=$2
-	local password=$3
-
-	remote_ssh_as_root $host $port $password "systemctl enable nftables" || {
-		return 1
-	}
-}	
-
 ## @fn change_ssh_port()
 ## @brief Change the SSH port on the remote server
 ## @details
@@ -464,12 +374,17 @@ change_ssh_root_permit_to_no() {
 	}
 }
 
-# # Example usage
-# change_ssh_port_with_sudo $SERVER_HOST $SERVER_PORT "tirsvad" $ROOT_PASSWORD 10322
+install_fail2ban() {
+	local host=$1
+	local port=$2
+	local user=$3
+	local password=$4
+	local command=$5
 
-# # Example usage
-# change_ssh_port $SERVER_HOST $SERVER_PORT $ROOT_PASSWORD 10322
-
+	remote_ssh_as_su_sudo_command $host $port $user $password "apt-get install fail2ban -y" || {
+		return 1
+	}
+}
 
 # Check if the script is being sourced or executed
 # If the script is executed, print an error message and exit with an error code.

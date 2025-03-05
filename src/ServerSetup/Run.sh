@@ -72,16 +72,17 @@ check_server_connection_handler() {
 	tcli_linux_bash_logger_infoscreen "Checking Server Connection"
 	can_connect_server $SERVER_HOST $SERVER_PORT $ROOT_PASSWORD $SERVER_PORT_HARDNESS || {
 		err=$?
-		tcli_linux_bash_logger_infoscreenFailed
 		if [ $err -eq 1 ]; then
+			tcli_linux_bash_logger_infoscreenFailed
 			printf "\n${RED}Could not connect to the server ${SERVER_HOST}:${SERVER_PORT} ${NC}\n"
 			exit $err
 		fi
 		if [ $err -eq 2 ]; then
-			printf "\n${RED}SSH could not be connected{NC}\n"
-			exit $err
+			tcli_linux_bash_logger_infoscreenWarn
+			tcli_linux_bash_logger_file_warn "if we already have a user with sudo rights, we can ignore this warning" "SSH could not be connected with root user"
+			return 0
 		fi
-		printf "\n${RED}Could not connect to the server. UNKNOW why!${NC}\n"
+		printf "\n${RED}Could not connect to the server. UNKNOW error!${NC}\n"
 		exit $err
 	}
 	tcli_linux_bash_logger_infoscreenDone
@@ -122,6 +123,11 @@ upgrade_os_handler() {
 	tcli_linux_bash_logger_infoscreenDone
 }
 
+## @fn add_needed_packages_handler()
+## @brief Add needed packages
+## @details
+## This function adds needed packages
+## @exit 1 if the needed packages are not added
 add_needed_packages_handler() {
 	tcli_linux_bash_logger_infoscreen "Adding Needed Packages"
 	add_needed_packages $SERVER_HOST $SERVER_PORT $ROOT_PASSWORD || {
@@ -131,7 +137,6 @@ add_needed_packages_handler() {
 	}
 	tcli_linux_bash_logger_infoscreenDone
 }
-
 
 ## @fn create_user_handler()
 ## @brief Create a user
@@ -214,6 +219,16 @@ hardness_handler() {
 	tcli_linux_bash_logger_infoscreenDone
 }
 
+setup_fail2ban_handler() {
+	tcli_linux_bash_logger_infoscreen "Setting up Fail2Ban"
+	install_fail2ban $SERVER_HOST $SERVER_PORT_HARDNESS $SU_NAME $ROOT_PASSWORD || {
+		tcli_linux_bash_logger_infoscreenFailed
+		printf "\n${RED}Failed to setup Fail2Ban${NC}\n"
+		exit 1
+	}
+	tcli_linux_bash_logger_infoscreenDone
+}
+
 init_handler
 is_settigns_file_handler
 tcli_linux_bash_logger_init "${TCLI_LINUX_BASH_SERVERSETUP_PATH_LOG}/log" "ServerSetup"
@@ -229,9 +244,10 @@ check_server_connection_handler
 
 # From here we make the changes on the server
 
-update_os_handler
-upgrade_os_handler
-add_needed_packages_handler
-create_user_handler
-user_sshkey_handler
-hardness_handler
+#update_os_handler
+#upgrade_os_handler
+#add_needed_packages_handler
+#create_user_handler
+#user_sshkey_handler
+#hardness_handler
+setup_fail2ban_handler

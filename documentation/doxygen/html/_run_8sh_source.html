@@ -119,128 +119,210 @@ $(function() {
 <div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span><span class="preprocessor">## @exit 2 if the SSH can not be connected</span></div>
 <div class="line"><a id="l00071" name="l00071"></a><span class="lineno"><a class="line" href="_run_8sh.html#a65042f7df2032e8290adbd2af9cd5d9e">   71</a></span><a class="code hl_function" href="_run_8sh.html#a65042f7df2032e8290adbd2af9cd5d9e">check_server_connection_handler</a>() {</div>
 <div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>  <a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#aef8745f6f11178adf4d121b45c4908a1">tcli_linux_bash_logger_infoscreen</a> <span class="stringliteral">&quot;Checking Server Connection&quot;</span></div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>  can_connect_server $SERVER_HOST $SERVER_PORT $ROOT_PASSWORD || {</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>  can_connect_server $SERVER_HOST $SERVER_PORT $ROOT_PASSWORD $SERVER_PORT_HARDNESS || {</div>
 <div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>    err=$?</div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>    <a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#aef699b2d09a5cd356d49eb4de8e6755f">tcli_linux_bash_logger_infoscreenFailed</a></div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>    <span class="keywordflow">if</span> [ $err -eq 1 ]; then</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>    <span class="keywordflow">if</span> [ $err -eq 1 ]; then</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>      <a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#aef699b2d09a5cd356d49eb4de8e6755f">tcli_linux_bash_logger_infoscreenFailed</a></div>
 <div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>      printf <span class="stringliteral">&quot;\n${RED}Could not connect to the server ${SERVER_HOST}:${SERVER_PORT} ${NC}\n&quot;</span></div>
 <div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>      exit $err</div>
 <div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>    fi</div>
 <div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>    <span class="keywordflow">if</span> [ $err -eq 2 ]; then</div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>      printf <span class="stringliteral">&quot;\n${RED}SSH could not be connected{NC}\n&quot;</span></div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>      exit $err</div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>    fi</div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>    printf <span class="stringliteral">&quot;\n${RED}Could not connect to the server. UNKNOW why!${NC}\n&quot;</span></div>
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>    exit $err</div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>  }</div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>  <a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#a13a93b3b06e2005da6881f9b1df7da7e">tcli_linux_bash_logger_infoscreenDone</a></div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>}</div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span> </div>
-<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span><span class="preprocessor">## @fn update_os_handler()</span></div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span><span class="preprocessor">## @brief Update the OS</span></div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span><span class="preprocessor">## @details</span></div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span><span class="preprocessor">## This function updates the OS</span></div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span><span class="preprocessor">## @exit 1 if the OS is not updated</span></div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno"><a class="line" href="_run_8sh.html#ad1d59ba04559f71667a72282657290be">   95</a></span><a class="code hl_function" href="_run_8sh.html#ad1d59ba04559f71667a72282657290be">update_os_handler</a>() {</div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>  <a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#aef8745f6f11178adf4d121b45c4908a1">tcli_linux_bash_logger_infoscreen</a> <span class="stringliteral">&quot;Updating OS&quot;</span></div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>  reconfigure_dpkg || {</div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>    <a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#aef699b2d09a5cd356d49eb4de8e6755f">tcli_linux_bash_logger_infoscreenFailed</a></div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>    printf <span class="stringliteral">&quot;\n${RED}Failed to reconfigure dpkg${NC}\n&quot;</span></div>
-<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>    exit 1</div>
-<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>  }</div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>  update_os || {</div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>    <a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#aef699b2d09a5cd356d49eb4de8e6755f">tcli_linux_bash_logger_infoscreenFailed</a></div>
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>    printf <span class="stringliteral">&quot;\n${RED}Failed to update OS${NC}\n&quot;</span></div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>    exit 1</div>
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>  }</div>
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>  <a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#a13a93b3b06e2005da6881f9b1df7da7e">tcli_linux_bash_logger_infoscreenDone</a></div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>}</div>
-<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span> </div>
-<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span><span class="preprocessor">## @fn upgrade_os_handler()</span></div>
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span><span class="preprocessor">## @brief Upgrade the OS</span></div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span><span class="preprocessor">## @details</span></div>
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span><span class="preprocessor">## This function upgrades the OS</span></div>
-<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span><span class="preprocessor">## @exit 1 if the OS is not upgraded</span></div>
-<div class="line"><a id="l00115" name="l00115"></a><span class="lineno"><a class="line" href="_run_8sh.html#aeda3812547fd07c5ca68dbbdd4278cb8">  115</a></span><a class="code hl_function" href="_run_8sh.html#aeda3812547fd07c5ca68dbbdd4278cb8">upgrade_os_handler</a>() {</div>
-<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>  <a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#aef8745f6f11178adf4d121b45c4908a1">tcli_linux_bash_logger_infoscreen</a> <span class="stringliteral">&quot;Upgrading OS&quot;</span></div>
-<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>  upgrade_os || {</div>
-<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>    <a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#aef699b2d09a5cd356d49eb4de8e6755f">tcli_linux_bash_logger_infoscreenFailed</a></div>
-<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>    printf <span class="stringliteral">&quot;\n${RED}Failed to upgrade OS${NC}\n&quot;</span></div>
-<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>    exit 1</div>
-<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>  }</div>
-<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>  <a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#a13a93b3b06e2005da6881f9b1df7da7e">tcli_linux_bash_logger_infoscreenDone</a></div>
-<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>}</div>
-<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span> </div>
-<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span><span class="preprocessor">## @fn create_user_handler()</span></div>
-<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span><span class="preprocessor">## @brief Create a user</span></div>
-<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span><span class="preprocessor">## @details</span></div>
-<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span><span class="preprocessor">## This function creates a user</span></div>
-<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span><span class="preprocessor">## @exit 1 if the user is not created</span></div>
-<div class="line"><a id="l00130" name="l00130"></a><span class="lineno"><a class="line" href="_run_8sh.html#a369c6d1a4547a2a533c07c4ca1a6e924">  130</a></span><a class="code hl_function" href="_run_8sh.html#a369c6d1a4547a2a533c07c4ca1a6e924">create_user_handler</a>() {</div>
-<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>  <a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#aef8745f6f11178adf4d121b45c4908a1">tcli_linux_bash_logger_infoscreen</a> <span class="stringliteral">&quot;Creating User&quot;</span></div>
-<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>  <a class="code hl_function" href="server_setup_8sh.html#ae6ce98a84a669cbbb2a5e8cdd6cbdd39">remote_ssh_as_root</a> $SERVER_HOST $SERVER_PORT $ROOT_PASSWORD <span class="stringliteral">&quot;useradd -m -s /bin/bash ${SU_NAME}; chpasswd chpasswd &lt;&lt;&lt; \&quot;${SU_NAME}:${SU_PASSWORD}\&quot;&quot;</span> || {</div>
-<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>    <a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#aef699b2d09a5cd356d49eb4de8e6755f">tcli_linux_bash_logger_infoscreenFailed</a></div>
-<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>    printf <span class="stringliteral">&quot;\n${RED}Failed to create user${NC}\n&quot;</span></div>
-<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>    exit 1</div>
-<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>  }</div>
-<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>  <a class="code hl_function" href="server_setup_8sh.html#ae6ce98a84a669cbbb2a5e8cdd6cbdd39">remote_ssh_as_root</a> $SERVER_HOST $SERVER_PORT $ROOT_PASSWORD <span class="stringliteral">&quot;usermod -a -G sudo ${SU_NAME}&quot;</span> || {</div>
-<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>    <a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#aef699b2d09a5cd356d49eb4de8e6755f">tcli_linux_bash_logger_infoscreenFailed</a></div>
-<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>    printf <span class="stringliteral">&quot;\n${RED}Failed to create user${NC}\n&quot;</span></div>
-<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>    exit 1</div>
-<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>  }</div>
-<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>  <a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#a13a93b3b06e2005da6881f9b1df7da7e">tcli_linux_bash_logger_infoscreenDone</a></div>
-<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>}</div>
-<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span> </div>
-<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span><span class="preprocessor">## @fn user_sshkey_handler()</span></div>
-<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span><span class="preprocessor">## @brief Upload SSH key to server</span></div>
-<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span><span class="preprocessor">## @details</span></div>
-<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span><span class="preprocessor">## This function uploads a SSH key to the server</span></div>
-<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span><span class="preprocessor">## @exit 1 if the SSH key is not uploaded</span></div>
-<div class="line"><a id="l00150" name="l00150"></a><span class="lineno"><a class="line" href="_run_8sh.html#a59191747f020b7a51b551760f3c03c28">  150</a></span><a class="code hl_function" href="_run_8sh.html#a59191747f020b7a51b551760f3c03c28">user_sshkey_handler</a>() {</div>
-<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>  <a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#aef8745f6f11178adf4d121b45c4908a1">tcli_linux_bash_logger_infoscreen</a> <span class="stringliteral">&quot;Checking SSH Key&quot;</span></div>
-<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span><span class="preprocessor">  #has_user_ssh_key_else_create_one || {</span></div>
-<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span><span class="preprocessor">  # tcli_linux_bash_logger_infoscreenFailed</span></div>
-<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span><span class="preprocessor">  # printf &quot;\n${RED}Failed to create SSH key${NC}\n&quot;</span></div>
-<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span><span class="preprocessor">  # exit 1</span></div>
-<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span><span class="preprocessor">  #}</span></div>
-<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>  upload_ssh_key_to_server $SERVER_HOST $SERVER_PORT $SU_NAME $SU_PASSWORD || {</div>
-<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>    <a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#aef699b2d09a5cd356d49eb4de8e6755f">tcli_linux_bash_logger_infoscreenFailed</a></div>
-<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>    printf <span class="stringliteral">&quot;\n${RED}Failed to upload SSH key to server${NC}\n&quot;</span></div>
-<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>    exit 1</div>
-<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>  }</div>
-<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>  <a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#a13a93b3b06e2005da6881f9b1df7da7e">tcli_linux_bash_logger_infoscreenDone</a></div>
-<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>}</div>
-<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span><a class="code hl_function" href="_run_8sh.html#a7ffe70b0ad19d7eebdc938f3eac65b56">init_handler</a></div>
-<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span><a class="code hl_function" href="_run_8sh.html#a20237378065fefcd6239e829cbaefe61">is_settigns_file_handler</a></div>
-<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span><a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#af84196ac3b29a64f0e93608f3762b1b8">tcli_linux_bash_logger_init</a> <span class="stringliteral">&quot;${TCLI_LINUX_BASH_SERVERSETUP_PATH_LOG}/log&quot;</span> <span class="stringliteral">&quot;ServerSetup&quot;</span></div>
-<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span> </div>
-<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span><span class="preprocessor"># Clear the screen</span></div>
-<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>clear</div>
-<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span> </div>
-<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span><a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#abd7e56e5de1094745d4ecaf77e82a08d">tcli_linux_bash_logger_title</a> <span class="stringliteral">&quot;Server Setup&quot;</span></div>
-<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span><a class="code hl_function" href="_run_8sh.html#a4e81a121157126d7db7bde400fe2bcde">checking_dependencies_handler</a></div>
-<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span><a class="code hl_function" href="_run_8sh.html#a0850ea36d54e97a29d7dbe113ec41b61">checking_settings_handler</a></div>
-<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span><a class="code hl_function" href="_run_8sh.html#a65042f7df2032e8290adbd2af9cd5d9e">check_server_connection_handler</a></div>
-<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span><a class="code hl_function" href="_run_8sh.html#ad1d59ba04559f71667a72282657290be">update_os_handler</a></div>
-<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span><a class="code hl_function" href="_run_8sh.html#aeda3812547fd07c5ca68dbbdd4278cb8">upgrade_os_handler</a></div>
-<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span><a class="code hl_function" href="_run_8sh.html#a369c6d1a4547a2a533c07c4ca1a6e924">create_user_handler</a></div>
-<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span><a class="code hl_function" href="_run_8sh.html#a59191747f020b7a51b551760f3c03c28">user_sshkey_handler</a></div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>      <a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#a5708cf5bc7bf703723e170ac978b1486">tcli_linux_bash_logger_infoscreenWarn</a></div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>      <a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#ad339da559cf31433c0babfb0bb7cb269">tcli_linux_bash_logger_file_warn</a> <span class="stringliteral">&quot;if we already have a user with sudo rights, we can ignore this warning&quot;</span> <span class="stringliteral">&quot;SSH could not be connected with root user&quot;</span></div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>      <span class="keywordflow">return</span> 0</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>    fi</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>    printf <span class="stringliteral">&quot;\n${RED}Could not connect to the server. UNKNOW error!${NC}\n&quot;</span></div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>    exit $err</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>  }</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>  <a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#a13a93b3b06e2005da6881f9b1df7da7e">tcli_linux_bash_logger_infoscreenDone</a></div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>}</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span> </div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span><span class="preprocessor">## @fn update_os_handler()</span></div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span><span class="preprocessor">## @brief Update the OS</span></div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span><span class="preprocessor">## @details</span></div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span><span class="preprocessor">## This function updates the OS</span></div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span><span class="preprocessor">## @exit 1 if the OS is not updated</span></div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno"><a class="line" href="_run_8sh.html#ad1d59ba04559f71667a72282657290be">   96</a></span><a class="code hl_function" href="_run_8sh.html#ad1d59ba04559f71667a72282657290be">update_os_handler</a>() {</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>  <a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#aef8745f6f11178adf4d121b45c4908a1">tcli_linux_bash_logger_infoscreen</a> <span class="stringliteral">&quot;Updating OS&quot;</span></div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>  reconfigure_dpkg || {</div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>    <a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#aef699b2d09a5cd356d49eb4de8e6755f">tcli_linux_bash_logger_infoscreenFailed</a></div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>    printf <span class="stringliteral">&quot;\n${RED}Failed to reconfigure dpkg${NC}\n&quot;</span></div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>    exit 1</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>  }</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>  update_os || {</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>    <a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#aef699b2d09a5cd356d49eb4de8e6755f">tcli_linux_bash_logger_infoscreenFailed</a></div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>    printf <span class="stringliteral">&quot;\n${RED}Failed to update OS${NC}\n&quot;</span></div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>    exit 1</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>  }</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>  <a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#a13a93b3b06e2005da6881f9b1df7da7e">tcli_linux_bash_logger_infoscreenDone</a></div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>}</div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span> </div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span><span class="preprocessor">## @fn upgrade_os_handler()</span></div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span><span class="preprocessor">## @brief Upgrade the OS</span></div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span><span class="preprocessor">## @details</span></div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span><span class="preprocessor">## This function upgrades the OS</span></div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span><span class="preprocessor">## @exit 1 if the OS is not upgraded</span></div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno"><a class="line" href="_run_8sh.html#aeda3812547fd07c5ca68dbbdd4278cb8">  116</a></span><a class="code hl_function" href="_run_8sh.html#aeda3812547fd07c5ca68dbbdd4278cb8">upgrade_os_handler</a>() {</div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>  <a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#aef8745f6f11178adf4d121b45c4908a1">tcli_linux_bash_logger_infoscreen</a> <span class="stringliteral">&quot;Upgrading OS&quot;</span></div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>  upgrade_os || {</div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>    <a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#aef699b2d09a5cd356d49eb4de8e6755f">tcli_linux_bash_logger_infoscreenFailed</a></div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>    printf <span class="stringliteral">&quot;\n${RED}Failed to upgrade OS${NC}\n&quot;</span></div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>    exit 1</div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>  }</div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>  <a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#a13a93b3b06e2005da6881f9b1df7da7e">tcli_linux_bash_logger_infoscreenDone</a></div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>}</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span> </div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span><span class="preprocessor">## @fn add_needed_packages_handler()</span></div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span><span class="preprocessor">## @brief Add needed packages</span></div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span><span class="preprocessor">## @details</span></div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span><span class="preprocessor">## This function adds needed packages</span></div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span><span class="preprocessor">## @exit 1 if the needed packages are not added</span></div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno"><a class="line" href="_run_8sh.html#a9a3a5ca26e1a3c0fb454e969659f8962">  131</a></span><a class="code hl_function" href="_run_8sh.html#a9a3a5ca26e1a3c0fb454e969659f8962">add_needed_packages_handler</a>() {</div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>  <a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#aef8745f6f11178adf4d121b45c4908a1">tcli_linux_bash_logger_infoscreen</a> <span class="stringliteral">&quot;Adding Needed Packages&quot;</span></div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>  add_needed_packages $SERVER_HOST $SERVER_PORT $ROOT_PASSWORD || {</div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>    <a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#aef699b2d09a5cd356d49eb4de8e6755f">tcli_linux_bash_logger_infoscreenFailed</a></div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>    printf <span class="stringliteral">&quot;\n${RED}Failed to install needed packages${NC}\n&quot;</span></div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>    exit 1</div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>  }</div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>  <a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#a13a93b3b06e2005da6881f9b1df7da7e">tcli_linux_bash_logger_infoscreenDone</a></div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>}</div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span> </div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span><span class="preprocessor">## @fn create_user_handler()</span></div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span><span class="preprocessor">## @brief Create a user</span></div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span><span class="preprocessor">## @details</span></div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span><span class="preprocessor">## This function creates a user</span></div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span><span class="preprocessor">## @exit 1 if the user is not created</span></div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno"><a class="line" href="_run_8sh.html#a369c6d1a4547a2a533c07c4ca1a6e924">  146</a></span><a class="code hl_function" href="_run_8sh.html#a369c6d1a4547a2a533c07c4ca1a6e924">create_user_handler</a>() {</div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>  <a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#aef8745f6f11178adf4d121b45c4908a1">tcli_linux_bash_logger_infoscreen</a> <span class="stringliteral">&quot;Creating User&quot;</span></div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>  <a class="code hl_function" href="remote__connect_8sh.html#ae6ce98a84a669cbbb2a5e8cdd6cbdd39">remote_ssh_as_root</a> $SERVER_HOST $SERVER_PORT $ROOT_PASSWORD <span class="stringliteral">&quot;useradd -m -s /bin/bash ${SU_NAME}; chpasswd chpasswd &lt;&lt;&lt; \&quot;${SU_NAME}:${SU_PASSWORD}\&quot;&quot;</span> || {</div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>    <a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#aef699b2d09a5cd356d49eb4de8e6755f">tcli_linux_bash_logger_infoscreenFailed</a></div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>    printf <span class="stringliteral">&quot;\n${RED}Failed to create user${NC}\n&quot;</span></div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>    exit 1</div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>  }</div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>  <a class="code hl_function" href="remote__connect_8sh.html#ae6ce98a84a669cbbb2a5e8cdd6cbdd39">remote_ssh_as_root</a> $SERVER_HOST $SERVER_PORT $ROOT_PASSWORD <span class="stringliteral">&quot;usermod -a -G sudo ${SU_NAME}&quot;</span> || {</div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>    <a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#aef699b2d09a5cd356d49eb4de8e6755f">tcli_linux_bash_logger_infoscreenFailed</a></div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>    printf <span class="stringliteral">&quot;\n${RED}Failed to create user${NC}\n&quot;</span></div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>    exit 1</div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>  }</div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>  <a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#a13a93b3b06e2005da6881f9b1df7da7e">tcli_linux_bash_logger_infoscreenDone</a></div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>}</div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span> </div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span><span class="preprocessor">## @fn user_sshkey_handler()</span></div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span><span class="preprocessor">## @brief Upload SSH key to server</span></div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span><span class="preprocessor">## @details</span></div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span><span class="preprocessor">## This function uploads a SSH key to the server</span></div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span><span class="preprocessor">## @exit 1 if the SSH key is not uploaded</span></div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno"><a class="line" href="_run_8sh.html#a59191747f020b7a51b551760f3c03c28">  166</a></span><a class="code hl_function" href="_run_8sh.html#a59191747f020b7a51b551760f3c03c28">user_sshkey_handler</a>() {</div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>  <a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#aef8745f6f11178adf4d121b45c4908a1">tcli_linux_bash_logger_infoscreen</a> <span class="stringliteral">&quot;Checking SSH Key&quot;</span></div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>  has_user_ssh_key_else_create_one || {</div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>    <a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#aef699b2d09a5cd356d49eb4de8e6755f">tcli_linux_bash_logger_infoscreenFailed</a></div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>    printf <span class="stringliteral">&quot;\n${RED}Failed to create SSH key${NC}\n&quot;</span></div>
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>    exit 1</div>
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>  }</div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>  upload_ssh_key_to_server $SERVER_HOST $SERVER_PORT $SU_NAME $SU_PASSWORD || {</div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>    <a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#aef699b2d09a5cd356d49eb4de8e6755f">tcli_linux_bash_logger_infoscreenFailed</a></div>
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>    printf <span class="stringliteral">&quot;\n${RED}Failed to upload SSH key to server${NC}\n&quot;</span></div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>    exit 1</div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>  }</div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>  <a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#a13a93b3b06e2005da6881f9b1df7da7e">tcli_linux_bash_logger_infoscreenDone</a></div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>}</div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span> </div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span><span class="preprocessor">## @fn hardness_handler()</span></div>
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span><span class="preprocessor">## @brief Harden the server</span></div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span><span class="preprocessor">## @details</span></div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span><span class="preprocessor">## This function hardens the server</span></div>
+<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span><span class="preprocessor">## @exit 1 if the server is not hardened</span></div>
+<div class="line"><a id="l00186" name="l00186"></a><span class="lineno"><a class="line" href="_run_8sh.html#a290bb6b4361b8530c91fcbc555e09d8b">  186</a></span><a class="code hl_function" href="_run_8sh.html#a290bb6b4361b8530c91fcbc555e09d8b">hardness_handler</a>() {</div>
+<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>  <a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#aef8745f6f11178adf4d121b45c4908a1">tcli_linux_bash_logger_infoscreen</a> <span class="stringliteral">&quot;Hardening Server&quot;</span></div>
+<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span> </div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>  change_ssh_port $SERVER_HOST $SERVER_PORT $ROOT_PASSWORD $SERVER_PORT_HARDNESS || {</div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>    <a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#aef699b2d09a5cd356d49eb4de8e6755f">tcli_linux_bash_logger_infoscreenFailed</a></div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>    printf <span class="stringliteral">&quot;\n${RED}Failed to change SSH port${NC}\n&quot;</span></div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>    exit 1</div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>  }</div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span> </div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>  <a class="code hl_function" href="nft_8sh.html#a67880b39ba3293ab2f260fc5477967ea">setup_basic_firewall</a> $SERVER_HOST $SERVER_PORT_HARDNESS $ROOT_PASSWORD || {</div>
+<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>    <a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#aef699b2d09a5cd356d49eb4de8e6755f">tcli_linux_bash_logger_infoscreenFailed</a></div>
+<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>    printf <span class="stringliteral">&quot;\n${RED}Failed to setup basic firewall${NC}\n&quot;</span></div>
+<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>    exit 1</div>
+<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span>  }</div>
+<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span> </div>
+<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span>  <a class="code hl_function" href="nft_8sh.html#ab840abb287a160182ebd6bfa10cf6d4b">firewall_save_rules</a> $SERVER_HOST $SERVER_PORT_HARDNESS $ROOT_PASSWORD || {</div>
+<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>    <a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#aef699b2d09a5cd356d49eb4de8e6755f">tcli_linux_bash_logger_infoscreenFailed</a></div>
+<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>    printf <span class="stringliteral">&quot;\n${RED}Failed to save firewall rules${NC}\n&quot;</span></div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>    exit 1</div>
+<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>  }</div>
+<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span> </div>
+<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>  <a class="code hl_function" href="nft_8sh.html#af690480784b2887167a8c3c5843cca49">firewall_load_conf_at_boot</a> $SERVER_HOST $SERVER_PORT_HARDNESS $ROOT_PASSWORD || {</div>
+<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span>    <a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#aef699b2d09a5cd356d49eb4de8e6755f">tcli_linux_bash_logger_infoscreenFailed</a></div>
+<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>    printf <span class="stringliteral">&quot;\n${RED}Failed to load firewall config at boot${NC}\n&quot;</span></div>
+<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>    exit 1</div>
+<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>  }</div>
+<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span> </div>
+<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>  change_ssh_root_permit_to_no $SERVER_HOST $SERVER_PORT_HARDNESS $ROOT_PASSWORD || {</div>
+<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span>    <a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#aef699b2d09a5cd356d49eb4de8e6755f">tcli_linux_bash_logger_infoscreenFailed</a></div>
+<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>    printf <span class="stringliteral">&quot;\n${RED}Failed to change SSH root permit to no${NC}\n&quot;</span></div>
+<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>    exit 1</div>
+<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>  }</div>
+<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span> </div>
+<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span>  <a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#a13a93b3b06e2005da6881f9b1df7da7e">tcli_linux_bash_logger_infoscreenDone</a></div>
+<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span>}</div>
+<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span> </div>
+<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>setup_fail2ban_handler() {</div>
+<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span>  <a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#aef8745f6f11178adf4d121b45c4908a1">tcli_linux_bash_logger_infoscreen</a> <span class="stringliteral">&quot;Setting up Fail2Ban&quot;</span></div>
+<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span>  install_fail2ban $SERVER_HOST $SERVER_PORT_HARDNESS $SU_NAME $ROOT_PASSWORD || {</div>
+<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>    <a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#aef699b2d09a5cd356d49eb4de8e6755f">tcli_linux_bash_logger_infoscreenFailed</a></div>
+<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>    printf <span class="stringliteral">&quot;\n${RED}Failed to setup Fail2Ban${NC}\n&quot;</span></div>
+<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>    exit 1</div>
+<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>  }</div>
+<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>  <a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#a13a93b3b06e2005da6881f9b1df7da7e">tcli_linux_bash_logger_infoscreenDone</a></div>
+<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>}</div>
+<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span> </div>
+<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span><a class="code hl_function" href="_run_8sh.html#a7ffe70b0ad19d7eebdc938f3eac65b56">init_handler</a></div>
+<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span><a class="code hl_function" href="_run_8sh.html#a20237378065fefcd6239e829cbaefe61">is_settigns_file_handler</a></div>
+<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span><a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#af84196ac3b29a64f0e93608f3762b1b8">tcli_linux_bash_logger_init</a> <span class="stringliteral">&quot;${TCLI_LINUX_BASH_SERVERSETUP_PATH_LOG}/log&quot;</span> <span class="stringliteral">&quot;ServerSetup&quot;</span></div>
+<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span> </div>
+<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span><span class="preprocessor"># Clear the screen</span></div>
+<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span> </div>
+<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>clear</div>
+<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span> </div>
+<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span><a class="code hl_function" href="vendor_2_logger_2_run_8sh.html#abd7e56e5de1094745d4ecaf77e82a08d">tcli_linux_bash_logger_title</a> <span class="stringliteral">&quot;Server Setup&quot;</span></div>
+<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span><a class="code hl_function" href="_run_8sh.html#a4e81a121157126d7db7bde400fe2bcde">checking_dependencies_handler</a></div>
+<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span><a class="code hl_function" href="_run_8sh.html#a0850ea36d54e97a29d7dbe113ec41b61">checking_settings_handler</a></div>
+<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span><a class="code hl_function" href="_run_8sh.html#a65042f7df2032e8290adbd2af9cd5d9e">check_server_connection_handler</a></div>
+<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span> </div>
+<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span><span class="preprocessor"># From here we make the changes on the server</span></div>
+<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span> </div>
+<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span><span class="preprocessor">#update_os_handler</span></div>
+<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span><span class="preprocessor">#upgrade_os_handler</span></div>
+<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span><span class="preprocessor">#add_needed_packages_handler</span></div>
+<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span><span class="preprocessor">#create_user_handler</span></div>
+<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span><span class="preprocessor">#user_sshkey_handler</span></div>
+<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span><span class="preprocessor">#hardness_handler</span></div>
+<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span>setup_fail2ban_handler</div>
 <div class="ttc" id="a_run_8sh_html_a0850ea36d54e97a29d7dbe113ec41b61"><div class="ttname"><a href="_run_8sh.html#a0850ea36d54e97a29d7dbe113ec41b61">checking_settings_handler</a></div><div class="ttdeci">checking_settings_handler()</div><div class="ttdoc">Check settings.</div><div class="ttdef"><b>Definition:</b> <a href="_run_8sh_source.html#l00055">Run.sh:55</a></div></div>
 <div class="ttc" id="a_run_8sh_html_a20237378065fefcd6239e829cbaefe61"><div class="ttname"><a href="_run_8sh.html#a20237378065fefcd6239e829cbaefe61">is_settigns_file_handler</a></div><div class="ttdeci">is_settigns_file_handler()</div><div class="ttdoc">Check if the settings file exists.</div><div class="ttdef"><b>Definition:</b> <a href="_run_8sh_source.html#l00027">Run.sh:27</a></div></div>
-<div class="ttc" id="a_run_8sh_html_a369c6d1a4547a2a533c07c4ca1a6e924"><div class="ttname"><a href="_run_8sh.html#a369c6d1a4547a2a533c07c4ca1a6e924">create_user_handler</a></div><div class="ttdeci">create_user_handler()</div><div class="ttdoc">Create a user.</div><div class="ttdef"><b>Definition:</b> <a href="_run_8sh_source.html#l00130">Run.sh:130</a></div></div>
+<div class="ttc" id="a_run_8sh_html_a290bb6b4361b8530c91fcbc555e09d8b"><div class="ttname"><a href="_run_8sh.html#a290bb6b4361b8530c91fcbc555e09d8b">hardness_handler</a></div><div class="ttdeci">hardness_handler()</div><div class="ttdoc">Harden the server.</div><div class="ttdef"><b>Definition:</b> <a href="_run_8sh_source.html#l00186">Run.sh:186</a></div></div>
+<div class="ttc" id="a_run_8sh_html_a369c6d1a4547a2a533c07c4ca1a6e924"><div class="ttname"><a href="_run_8sh.html#a369c6d1a4547a2a533c07c4ca1a6e924">create_user_handler</a></div><div class="ttdeci">create_user_handler()</div><div class="ttdoc">Create a user.</div><div class="ttdef"><b>Definition:</b> <a href="_run_8sh_source.html#l00146">Run.sh:146</a></div></div>
 <div class="ttc" id="a_run_8sh_html_a4e81a121157126d7db7bde400fe2bcde"><div class="ttname"><a href="_run_8sh.html#a4e81a121157126d7db7bde400fe2bcde">checking_dependencies_handler</a></div><div class="ttdeci">checking_dependencies_handler()</div><div class="ttdoc">Check dependencies.</div><div class="ttdef"><b>Definition:</b> <a href="_run_8sh_source.html#l00039">Run.sh:39</a></div></div>
-<div class="ttc" id="a_run_8sh_html_a59191747f020b7a51b551760f3c03c28"><div class="ttname"><a href="_run_8sh.html#a59191747f020b7a51b551760f3c03c28">user_sshkey_handler</a></div><div class="ttdeci">user_sshkey_handler()</div><div class="ttdoc">Upload SSH key to server.</div><div class="ttdef"><b>Definition:</b> <a href="_run_8sh_source.html#l00150">Run.sh:150</a></div></div>
+<div class="ttc" id="a_run_8sh_html_a59191747f020b7a51b551760f3c03c28"><div class="ttname"><a href="_run_8sh.html#a59191747f020b7a51b551760f3c03c28">user_sshkey_handler</a></div><div class="ttdeci">user_sshkey_handler()</div><div class="ttdoc">Upload SSH key to server.</div><div class="ttdef"><b>Definition:</b> <a href="_run_8sh_source.html#l00166">Run.sh:166</a></div></div>
 <div class="ttc" id="a_run_8sh_html_a65042f7df2032e8290adbd2af9cd5d9e"><div class="ttname"><a href="_run_8sh.html#a65042f7df2032e8290adbd2af9cd5d9e">check_server_connection_handler</a></div><div class="ttdeci">check_server_connection_handler()</div><div class="ttdoc">Check server connection.</div><div class="ttdef"><b>Definition:</b> <a href="_run_8sh_source.html#l00071">Run.sh:71</a></div></div>
 <div class="ttc" id="a_run_8sh_html_a7ffe70b0ad19d7eebdc938f3eac65b56"><div class="ttname"><a href="_run_8sh.html#a7ffe70b0ad19d7eebdc938f3eac65b56">init_handler</a></div><div class="ttdeci">init_handler()</div><div class="ttdoc">Initialize the Server Setup.</div><div class="ttdef"><b>Definition:</b> <a href="_run_8sh_source.html#l00014">Run.sh:14</a></div></div>
-<div class="ttc" id="a_run_8sh_html_ad1d59ba04559f71667a72282657290be"><div class="ttname"><a href="_run_8sh.html#ad1d59ba04559f71667a72282657290be">update_os_handler</a></div><div class="ttdeci">update_os_handler()</div><div class="ttdoc">Update the OS.</div><div class="ttdef"><b>Definition:</b> <a href="_run_8sh_source.html#l00095">Run.sh:95</a></div></div>
-<div class="ttc" id="a_run_8sh_html_aeda3812547fd07c5ca68dbbdd4278cb8"><div class="ttname"><a href="_run_8sh.html#aeda3812547fd07c5ca68dbbdd4278cb8">upgrade_os_handler</a></div><div class="ttdeci">upgrade_os_handler()</div><div class="ttdoc">Upgrade the OS.</div><div class="ttdef"><b>Definition:</b> <a href="_run_8sh_source.html#l00115">Run.sh:115</a></div></div>
-<div class="ttc" id="aserver_setup_8sh_html_a4be4055f3361d4800e16bc2e2e38cda6"><div class="ttname"><a href="server_setup_8sh.html#a4be4055f3361d4800e16bc2e2e38cda6">init</a></div><div class="ttdeci">init()</div><div class="ttdoc">Initialize the Server Setup.</div><div class="ttdef"><b>Definition:</b> <a href="server_setup_8sh_source.html#l00024">serverSetup.sh:24</a></div></div>
-<div class="ttc" id="aserver_setup_8sh_html_a88ff3977462a8faeb36023dc7422b33f"><div class="ttname"><a href="server_setup_8sh.html#a88ff3977462a8faeb36023dc7422b33f">validate_settings</a></div><div class="ttdeci">validate_settings()</div><div class="ttdoc">Validate the settings.</div><div class="ttdef"><b>Definition:</b> <a href="server_setup_8sh_source.html#l00162">serverSetup.sh:162</a></div></div>
-<div class="ttc" id="aserver_setup_8sh_html_a8b02b7a03a0a0fec772f650af20b774c"><div class="ttname"><a href="server_setup_8sh.html#a8b02b7a03a0a0fec772f650af20b774c">precheck</a></div><div class="ttdeci">precheck()</div><div class="ttdoc">Checking Dependencies.</div><div class="ttdef"><b>Definition:</b> <a href="server_setup_8sh_source.html#l00084">serverSetup.sh:84</a></div></div>
-<div class="ttc" id="aserver_setup_8sh_html_abde1f94e798eb09412262374421cb9ec"><div class="ttname"><a href="server_setup_8sh.html#abde1f94e798eb09412262374421cb9ec">is_settigns_file</a></div><div class="ttdeci">is_settigns_file()</div><div class="ttdoc">Check if the settings file exists.</div><div class="ttdef"><b>Definition:</b> <a href="server_setup_8sh_source.html#l00070">serverSetup.sh:70</a></div></div>
-<div class="ttc" id="aserver_setup_8sh_html_ae6ce98a84a669cbbb2a5e8cdd6cbdd39"><div class="ttname"><a href="server_setup_8sh.html#ae6ce98a84a669cbbb2a5e8cdd6cbdd39">remote_ssh_as_root</a></div><div class="ttdeci">remote_ssh_as_root(host, port, password, command)</div><div class="ttdoc">Run a command on a remote server as root.</div><div class="ttdef"><b>Definition:</b> <a href="server_setup_8sh_source.html#l00180">serverSetup.sh:180</a></div></div>
+<div class="ttc" id="a_run_8sh_html_a9a3a5ca26e1a3c0fb454e969659f8962"><div class="ttname"><a href="_run_8sh.html#a9a3a5ca26e1a3c0fb454e969659f8962">add_needed_packages_handler</a></div><div class="ttdeci">add_needed_packages_handler()</div><div class="ttdoc">Add needed packages.</div><div class="ttdef"><b>Definition:</b> <a href="_run_8sh_source.html#l00131">Run.sh:131</a></div></div>
+<div class="ttc" id="a_run_8sh_html_ad1d59ba04559f71667a72282657290be"><div class="ttname"><a href="_run_8sh.html#ad1d59ba04559f71667a72282657290be">update_os_handler</a></div><div class="ttdeci">update_os_handler()</div><div class="ttdoc">Update the OS.</div><div class="ttdef"><b>Definition:</b> <a href="_run_8sh_source.html#l00096">Run.sh:96</a></div></div>
+<div class="ttc" id="a_run_8sh_html_aeda3812547fd07c5ca68dbbdd4278cb8"><div class="ttname"><a href="_run_8sh.html#aeda3812547fd07c5ca68dbbdd4278cb8">upgrade_os_handler</a></div><div class="ttdeci">upgrade_os_handler()</div><div class="ttdoc">Upgrade the OS.</div><div class="ttdef"><b>Definition:</b> <a href="_run_8sh_source.html#l00116">Run.sh:116</a></div></div>
+<div class="ttc" id="anft_8sh_html_a67880b39ba3293ab2f260fc5477967ea"><div class="ttname"><a href="nft_8sh.html#a67880b39ba3293ab2f260fc5477967ea">setup_basic_firewall</a></div><div class="ttdeci">setup_basic_firewall(host, port, password)</div><div class="ttdoc">Setup a basic firewall.</div><div class="ttdef"><b>Definition:</b> <a href="nft_8sh_source.html#l00011">nft.sh:11</a></div></div>
+<div class="ttc" id="anft_8sh_html_ab840abb287a160182ebd6bfa10cf6d4b"><div class="ttname"><a href="nft_8sh.html#ab840abb287a160182ebd6bfa10cf6d4b">firewall_save_rules</a></div><div class="ttdeci">firewall_save_rules(host, port, password)</div><div class="ttdoc">Save the firewall rules.</div><div class="ttdef"><b>Definition:</b> <a href="nft_8sh_source.html#l00032">nft.sh:32</a></div></div>
+<div class="ttc" id="anft_8sh_html_af690480784b2887167a8c3c5843cca49"><div class="ttname"><a href="nft_8sh.html#af690480784b2887167a8c3c5843cca49">firewall_load_conf_at_boot</a></div><div class="ttdeci">firewall_load_conf_at_boot(host, port, password)</div><div class="ttdoc">Load the firewall config at boot.</div><div class="ttdef"><b>Definition:</b> <a href="nft_8sh_source.html#l00051">nft.sh:51</a></div></div>
+<div class="ttc" id="aremote__connect_8sh_html_ae6ce98a84a669cbbb2a5e8cdd6cbdd39"><div class="ttname"><a href="remote__connect_8sh.html#ae6ce98a84a669cbbb2a5e8cdd6cbdd39">remote_ssh_as_root</a></div><div class="ttdeci">remote_ssh_as_root(host, port, password, command)</div><div class="ttdoc">Run a command on a remote server as root.</div><div class="ttdef"><b>Definition:</b> <a href="remote__connect_8sh_source.html#l00018">remote_connect.sh:18</a></div></div>
+<div class="ttc" id="aserver_setup_8sh_html_a4be4055f3361d4800e16bc2e2e38cda6"><div class="ttname"><a href="server_setup_8sh.html#a4be4055f3361d4800e16bc2e2e38cda6">init</a></div><div class="ttdeci">init()</div><div class="ttdoc">Initialize the Server Setup.</div><div class="ttdef"><b>Definition:</b> <a href="server_setup_8sh_source.html#l00023">serverSetup.sh:23</a></div></div>
+<div class="ttc" id="aserver_setup_8sh_html_a88ff3977462a8faeb36023dc7422b33f"><div class="ttname"><a href="server_setup_8sh.html#a88ff3977462a8faeb36023dc7422b33f">validate_settings</a></div><div class="ttdeci">validate_settings()</div><div class="ttdoc">Validate the settings.</div><div class="ttdef"><b>Definition:</b> <a href="server_setup_8sh_source.html#l00165">serverSetup.sh:165</a></div></div>
+<div class="ttc" id="aserver_setup_8sh_html_a8b02b7a03a0a0fec772f650af20b774c"><div class="ttname"><a href="server_setup_8sh.html#a8b02b7a03a0a0fec772f650af20b774c">precheck</a></div><div class="ttdeci">precheck()</div><div class="ttdoc">Checking Dependencies.</div><div class="ttdef"><b>Definition:</b> <a href="server_setup_8sh_source.html#l00087">serverSetup.sh:87</a></div></div>
+<div class="ttc" id="aserver_setup_8sh_html_abde1f94e798eb09412262374421cb9ec"><div class="ttname"><a href="server_setup_8sh.html#abde1f94e798eb09412262374421cb9ec">is_settigns_file</a></div><div class="ttdeci">is_settigns_file()</div><div class="ttdoc">Check if the settings file exists.</div><div class="ttdef"><b>Definition:</b> <a href="server_setup_8sh_source.html#l00073">serverSetup.sh:73</a></div></div>
 <div class="ttc" id="avendor_2_logger_2_run_8sh_html_a13a93b3b06e2005da6881f9b1df7da7e"><div class="ttname"><a href="vendor_2_logger_2_run_8sh.html#a13a93b3b06e2005da6881f9b1df7da7e">tcli_linux_bash_logger_infoscreenDone</a></div><div class="ttdeci">tcli_linux_bash_logger_infoscreenDone()</div><div class="ttdef"><b>Definition:</b> <a href="vendor_2_logger_2_run_8sh_source.html#l00071">Run.sh:71</a></div></div>
+<div class="ttc" id="avendor_2_logger_2_run_8sh_html_a5708cf5bc7bf703723e170ac978b1486"><div class="ttname"><a href="vendor_2_logger_2_run_8sh.html#a5708cf5bc7bf703723e170ac978b1486">tcli_linux_bash_logger_infoscreenWarn</a></div><div class="ttdeci">tcli_linux_bash_logger_infoscreenWarn()</div><div class="ttdef"><b>Definition:</b> <a href="vendor_2_logger_2_run_8sh_source.html#l00116">Run.sh:116</a></div></div>
 <div class="ttc" id="avendor_2_logger_2_run_8sh_html_abd7e56e5de1094745d4ecaf77e82a08d"><div class="ttname"><a href="vendor_2_logger_2_run_8sh.html#abd7e56e5de1094745d4ecaf77e82a08d">tcli_linux_bash_logger_title</a></div><div class="ttdeci">tcli_linux_bash_logger_title(string, string, char)</div><div class="ttdef"><b>Definition:</b> <a href="vendor_2_logger_2_run_8sh_source.html#l00151">Run.sh:151</a></div></div>
+<div class="ttc" id="avendor_2_logger_2_run_8sh_html_ad339da559cf31433c0babfb0bb7cb269"><div class="ttname"><a href="vendor_2_logger_2_run_8sh.html#ad339da559cf31433c0babfb0bb7cb269">tcli_linux_bash_logger_file_warn</a></div><div class="ttdeci">tcli_linux_bash_logger_file_warn(string, string)</div><div class="ttdef"><b>Definition:</b> <a href="vendor_2_logger_2_run_8sh_source.html#l00185">Run.sh:185</a></div></div>
 <div class="ttc" id="avendor_2_logger_2_run_8sh_html_aef699b2d09a5cd356d49eb4de8e6755f"><div class="ttname"><a href="vendor_2_logger_2_run_8sh.html#aef699b2d09a5cd356d49eb4de8e6755f">tcli_linux_bash_logger_infoscreenFailed</a></div><div class="ttdeci">tcli_linux_bash_logger_infoscreenFailed(string, string, string, string)</div><div class="ttdef"><b>Definition:</b> <a href="vendor_2_logger_2_run_8sh_source.html#l00083">Run.sh:83</a></div></div>
 <div class="ttc" id="avendor_2_logger_2_run_8sh_html_aef8745f6f11178adf4d121b45c4908a1"><div class="ttname"><a href="vendor_2_logger_2_run_8sh.html#aef8745f6f11178adf4d121b45c4908a1">tcli_linux_bash_logger_infoscreen</a></div><div class="ttdeci">tcli_linux_bash_logger_infoscreen(string, string)</div><div class="ttdef"><b>Definition:</b> <a href="vendor_2_logger_2_run_8sh_source.html#l00059">Run.sh:59</a></div></div>
 <div class="ttc" id="avendor_2_logger_2_run_8sh_html_af84196ac3b29a64f0e93608f3762b1b8"><div class="ttname"><a href="vendor_2_logger_2_run_8sh.html#af84196ac3b29a64f0e93608f3762b1b8">tcli_linux_bash_logger_init</a></div><div class="ttdeci">tcli_linux_bash_logger_init(string)</div><div class="ttdef"><b>Definition:</b> <a href="vendor_2_logger_2_run_8sh_source.html#l00045">Run.sh:45</a></div></div>
