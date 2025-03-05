@@ -374,6 +374,18 @@ change_ssh_root_permit_to_no() {
 	}
 }
 
+install_fail2ban() {
+	local host=$1
+	local port=$2
+	local user=$3
+	local password=$4
+	local command=$5
+
+	remote_ssh_as_su_sudo_command $host $port $user $password "apt-get install fail2ban -y" || {
+		return 1
+	}
+}
+
 # Check if the script is being sourced or executed
 # If the script is executed, print an error message and exit with an error code.
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
